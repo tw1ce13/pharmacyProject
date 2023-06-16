@@ -81,7 +81,7 @@ public class HomeController : Controller
 
     public ActionResult Register()
     {
-        var flag = TempData["Flagernation"];
+        var flag = TempData["Flag"];
         if (flag != null)
             ViewBag.Flag = TempData["Flag"];
         else
