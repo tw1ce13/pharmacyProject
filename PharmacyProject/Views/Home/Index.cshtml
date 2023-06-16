@@ -1,9 +1,62 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using PharmacyProject.Domain.Models;
+@model IEnumerable<Web>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Main";
+}
+<div class="welcome-message">
+    <h1>Добро пожаловать в магазин всех лекарств</h1>
 </div>
+<br>
+<form id="pharmacyForm" method="POST" action="@Url.Action("GetDrugs", "Home")">
+    <div id="pharmaciesContainer">
+        <select id="selectBox" name="selectedOption">
+            <option>Выбрать сеть аптеки</option>
+            @foreach (var web in Model)
+            {
+                <option value="@web.Id">@web.Name</option>
+            }
+        </select>
+        <br />
+        <select id="selectBox2" name="pharmacyId">
+            <option>Выбрать адрес аптеки</option>
+        </select>
+    </div>
+    <input type="submit" value="Подтвердить" form="pharmacyForm" class="buttonSubmit"/>
+</form>
+
+
+
+
+    <script>
+
+        $(document).ready(function () {
+            $("#selectBox").change(function () {
+                var selectedWebId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/GetPharmacyAddresses",
+                    data: { webId: selectedWebId },
+                    success: function (result) {
+                        $("#selectBox2").html(result);
+                    },
+                    error: function (result) {
+                        alert("Ошибка при загрузке данных");
+                    }
+                });
+            });
+});
+
+    </script>
+
+
+
+
+
+
+
+
+
+
 

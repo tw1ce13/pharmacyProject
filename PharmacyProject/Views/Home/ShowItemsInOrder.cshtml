@@ -1,0 +1,51 @@
+﻿@model IEnumerable<dynamic>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Main";
+}
+@foreach (var item in Model)
+    {
+<div class="cart-item">
+    <div class="product-details">
+        <h3 class="product-name">@item.Name</h3>
+        <p class="product-price">@item.Price</p>
+        <p class="product-quantity">@item.Count</p>
+    </div>
+    <button class="remove-button">Удалить</button>
+</div>
+    }
+<style>
+    .cart-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .product-details {
+        flex-grow: 1;
+    }
+
+    .product-name {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .product-price {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .product-quantity {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .remove-button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+</style>

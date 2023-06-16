@@ -1,2 +1,7 @@
-@model TModel
+@using PharmacyProject.Domain.Models;
+@model IEnumerable<Pharmacy>
 
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.Address - @item.Type</option>
+}

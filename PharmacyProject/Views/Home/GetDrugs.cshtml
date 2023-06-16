@@ -1,0 +1,207 @@
+﻿@using PharmacyProject.Domain.Models
+@model IEnumerable<DrugResult>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Main";
+}
+
+
+<div class="container">
+    <h1>Список товаров</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Отпускается по рецепту</th>
+                <th>Описание</th>
+                <th>Cтоимость</th>
+                <th>Количество в наличии</th>
+                <th>Cрок годности</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    @if (item.IsRecipe)
+                    {
+                        <td>Да</td>
+                    }
+                    else
+                    {
+                        <td>Нет</td>
+                    }
+                    <td>@item.Type</td>
+                    <td>@item.Cost</td>
+                    <td>@item.Count</td>
+                    <td>@item.ExpirationData.ToShortDateString()</td>
+                    <td>
+                        <form method="post" action="@Url.Action("AddToOrder", "Home")">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="itemId" value="@item.Id" />
+                            <div class="quantity-container">
+                                <div class="quantity-buttons">
+                                    <button type="button" onclick="decreaseQuantity(@item.Id)">-</button>
+                                </div>
+                                <input type="number" name="quantity" id="quantity-@item.Id" value="1" min="1" class="quantity-input" />
+                                <div class="quantity-buttons">
+                                    <button type="button" onclick="increaseQuantity(@item.Id)">+</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="add-to-cart-button">Добавить в корзину</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>function decreaseQuantity(index) {
+        var quantityInput = document.getElementById("quantity-" + index);
+        if (parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    }
+
+    function increaseQuantity(index) {
+        var quantityInput = document.getElementById("quantity-" + index);
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    }</script>
+
+
+
+
+<style>
+
+    .container {
+        margin-top: 20px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: #fff;
+        border-collapse: collapse;
+    }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    .table-sm th,
+    .table-sm td {
+        padding: 0.3rem;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    .table-primary,
+    .table-primary > th,
+    .table-primary > td {
+        background-color: #c6e0f5;
+    }
+
+    .table-hover .table-primary:hover {
+        background-color: #b0d4f1;
+    }
+
+        .table-hover .table-primary:hover > td,
+        .table-hover .table-primary:hover > th {
+            background-color: #b0d4f1;
+        }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+<style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .quantity-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-input {
+        width: 40px;
+        padding: 4px;
+        margin-bottom: 4px;
+        font-size: 16px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    .quantity-buttons {
+        display: flex;
+        flex-direction: column;
+        margin-right: 8px;
+        margin-left: 8px;
+    }
+
+        .quantity-buttons button {
+            width: 30px;
+            padding: 2px;
+            font-size: 14px;
+            background-color: #eee;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .quantity-buttons button:hover {
+                background-color: #ddd;
+            }
+
+    .add-to-cart-button {
+        padding: 8px 16px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .add-to-cart-button:hover {
+            background-color: #45a049;
+        }
+</style>

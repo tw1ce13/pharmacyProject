@@ -1,14 +1,14 @@
 ﻿using System;
 using PharmacyProject.Domain.Enum;
 
-namespace PharmacyProject.DAL.Response
+namespace PharmacyProject.Domain.Response
 {
     public class BaseResponse<T> : IBaseResponse<T>
     {
         public BaseResponse()
         {
-        }
 
+        }
         public BaseResponse(string description, StatusCode statusCode, T data)
         {
             Description = description;
