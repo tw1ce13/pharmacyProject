@@ -1,18 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PharmacyProject.DAL;
 using PharmacyProject.Domain.Models;
 using PharmacyProject.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Microsoft.IdentityModel.Tokens;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace PharmacyProject.Controllers;
 
@@ -89,7 +83,6 @@ public class HomeController : Controller
         return View();
     }
 
-    [Authorize]
     public async Task<ActionResult> ShowDiscounts()
     {
         var discounts = await _discountService.GetAll();
@@ -108,6 +101,7 @@ public class HomeController : Controller
         Random random = new Random();
         int? pharmacyId = HttpContext.Session.GetInt32("PharmacyId");
         int employeeId = random.Next(7, 186);
+        var date = DateTime.UtcNow;
         if (pharmacyId.HasValue)
         {
             Order order = new Order()
@@ -173,7 +167,7 @@ public class HomeController : Controller
 
         var response = new
         {
-            access_token = encodedJwt,
+            access_token = encodedJwt
         };
 
         return Json(response);

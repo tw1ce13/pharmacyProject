@@ -16,11 +16,13 @@ namespace PharmacyProject.DAL.Repositories
         public void Add(Delivery data)
         {
             _context.Deliveries.Add(data);
+            _context.SaveChangesAsync();
         }
 
         public void Delete(Delivery data)
         {
             _context.Deliveries.Remove(data);
+            _context.SaveChangesAsync();
         }
 
 

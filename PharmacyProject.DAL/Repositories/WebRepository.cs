@@ -15,11 +15,13 @@ namespace PharmacyProject.DAL.Repositories
         public void Add(Web data)
         {
             _context.Webs.Add(data);
+            _context.SaveChangesAsync();
         }
 
         public void Delete(Web data)
         {
             _context.Webs.Remove(data);
+            _context.SaveChangesAsync();
         }
 
 

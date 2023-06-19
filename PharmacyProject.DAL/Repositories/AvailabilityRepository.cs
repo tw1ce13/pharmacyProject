@@ -16,11 +16,13 @@ namespace PharmacyProject.DAL.Repositories
         public void Add(Availability data)
         {
             _context.Availabilities.Add(data);
+            _context.SaveChangesAsync();
         }
 
         public void Delete(Availability data)
         {
             _context.Availabilities.Remove(data);
+            _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<Delivery> deliveries)
