@@ -13,24 +13,21 @@ namespace PharmacyProject.DAL.Repositories
             _context = context;
         }
 
-        public void Add(Discount data)
+        public void Add(Discount discount)
         {
-            _context.Discounts.Add(data);
+            _context.Discounts.Add(discount);
             _context.SaveChangesAsync();
         }
 
-        public void Delete(Discount data)
+        public void Delete(Discount discount)
         {
-            _context.Discounts.Remove(data);
+            _context.Discounts.Remove(discount);
             _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Discount>> GetAll()
-        {
-            var list = await _context.Discounts.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Discount>> GetAll()=>
+            await _context.Discounts.ToListAsync();
 
         public async Task<Discount> GetById(int id, CancellationToken token)
         {
@@ -44,10 +41,10 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task Update(Discount data)
+        public async Task Update(Discount discount)
         {
-            if (data != null)
-                _context.Discounts.Update(data);
+            if (discount != null)
+                _context.Discounts.Update(discount);
             await _context.SaveChangesAsync();
         }
     }

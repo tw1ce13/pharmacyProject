@@ -25,11 +25,8 @@ namespace PharmacyProject.DAL.Repositories
         }
 
 
-        public async Task<IEnumerable<Pharmacy>> GetAll()
-        {
-            var list = await _context.Pharmacies.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Pharmacy>> GetAll() =>
+            await _context.Pharmacies.ToListAsync();
 
         public async Task<Pharmacy> GetById(int id, CancellationToken token)
         {
@@ -37,7 +34,7 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task<Pharmacy> GetbyName(string address)
+        public async Task<Pharmacy> GetByAddress(string address)
         {
             var obj = await _context.Pharmacies.FirstOrDefaultAsync(x=> x.Address == address);
             return obj!;

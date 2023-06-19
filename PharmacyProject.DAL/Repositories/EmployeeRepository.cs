@@ -13,24 +13,21 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(Employee data)
+        public void Add(Employee employee)
         {
-            _context.Employees.Add(data);
+            _context.Employees.Add(employee);
             _context.SaveChangesAsync();
         }
 
-        public void Delete(Employee data)
+        public void Delete(Employee employee)
         {
-            _context.Employees.Remove(data);
+            _context.Employees.Remove(employee);
             _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Employee>> GetAll()
-        {
-            var list = await _context.Employees.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Employee>> GetAll() =>
+            await _context.Employees.ToListAsync();
 
         public async Task<Employee> GetById(int id, CancellationToken token)
         {
@@ -40,14 +37,14 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<Employee> GetbyName(string name)
         {
-            var obj = await _context.Employees.FindAsync(name);
+            var obj = await _context.Employees.FirstOrDefaultAsync(x=>x.Name == name);
             return obj!;
         }
 
-        public async Task Update(Employee data)
+        public async Task Update(Employee employee)
         {
-            if (data != null)
-                _context.Employees.Update(data);
+            if (employee != null)
+                _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
         }
     }

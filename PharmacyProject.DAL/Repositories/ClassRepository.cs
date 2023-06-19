@@ -13,23 +13,20 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(Class data)
+        public void Add(Class @class)
         {
-            _context.Classes.Add(data);
+            _context.Classes.Add(@class);
             _context.SaveChangesAsync();
         }
 
-        public void Delete(Class data)
+        public void Delete(Class @class)
         {
-            _context.Classes.Remove(data);
+            _context.Classes.Remove(@class);
             _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Class>> GetAll()
-        {
-            var list = await _context.Classes.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Class>> GetAll() =>
+            await _context.Classes.ToListAsync();
 
         public async Task<Class> GetById(int id, CancellationToken token)
         {
@@ -43,10 +40,10 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task Update(Class data)
+        public async Task Update(Class @class)
         {
-            if (data != null)
-                _context.Classes.Update(data);
+            if (@class != null)
+                _context.Classes.Update(@class);
             await _context.SaveChangesAsync();
         }
     }

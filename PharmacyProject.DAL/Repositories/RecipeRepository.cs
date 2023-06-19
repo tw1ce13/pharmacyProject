@@ -12,24 +12,21 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(Recipe data)
+        public void Add(Recipe recipe)
         {
-            _context.Recipes.Add(data);
+            _context.Recipes.Add(recipe);
             _context.SaveChangesAsync();
         }
 
-        public void Delete(Recipe data)
+        public void Delete(Recipe recipe)
         {
-            _context.Recipes.Remove(data);
+            _context.Recipes.Remove(recipe);
             _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Recipe>> GetAll()
-        {
-            var list = await _context.Recipes.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Recipe>> GetAll()=>
+            await _context.Recipes.ToListAsync();
 
         public async Task<Recipe> GetById(int id, CancellationToken token)
         {
@@ -43,10 +40,10 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task Update(Recipe data)
+        public async Task Update(Recipe recipe)
         {
-            if (data != null)
-                _context.Recipes.Update(data);
+            if (recipe != null)
+                _context.Recipes.Update(recipe);
             await _context.SaveChangesAsync();
         }
     }

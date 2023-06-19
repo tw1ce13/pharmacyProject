@@ -14,15 +14,15 @@ namespace PharmacyProject.DAL.Repositories
             _context = context;
 		}
 
-        public void Add(Availability data)
+        public void Add(Availability availability)
         {
-            _context.Availabilities.Add(data);
+            _context.Availabilities.Add(availability);
             _context.SaveChangesAsync();
         }
 
-        public void Delete(Availability data)
+        public void Delete(Availability availability)
         {
-            _context.Availabilities.Remove(data);
+            _context.Availabilities.Remove(availability);
             _context.SaveChangesAsync();
         }
 
@@ -32,11 +32,8 @@ namespace PharmacyProject.DAL.Repositories
             return list;
         }
 
-        public async Task<IEnumerable<Availability>> GetAll()
-        {
-            var list = await _context.Availabilities.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Availability>> GetAll() =>
+            await _context.Availabilities.ToListAsync();
 
         public async Task<IEnumerable<Availability>> GetAvailabilitiesByPharmacyId(int pharmacyId)
         {
@@ -52,10 +49,10 @@ namespace PharmacyProject.DAL.Repositories
         }
 
 
-        public async Task Update(Availability data)
+        public async Task Update(Availability availability)
         {
-            if (data != null)
-                _context.Availabilities.Update(data);
+            if (availability != null)
+                _context.Availabilities.Update(availability);
             await _context.SaveChangesAsync();
         }
     }

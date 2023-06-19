@@ -21,10 +21,10 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Class> Add(Class obj)
+        public IBaseResponse<Class> Add(Class @class)
         {
-            _classRepository.Add(obj);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
+            _classRepository.Add(@class);
+            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
 
             return baseResponse;
         }
@@ -43,10 +43,10 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Class> Delete(Class obj)
+        public IBaseResponse<Class> Delete(Class @class)
         {
-            _classRepository.Delete(obj);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
+            _classRepository.Delete(@class);
+            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
 
             return baseResponse;
         }
@@ -104,12 +104,12 @@ namespace PharmacyProject.Services.Implementations
             }
         }
 
-        public  IBaseResponse<Class> Update(Class obj)
+        public  IBaseResponse<Class> Update(Class @class)
         {
             var baseResponse = new BaseResponse<Class>();
             try
             {
-                if (obj == null)
+                if (@class == null)
                 {
                     baseResponse.Description = "Объект не найден";
                     baseResponse.StatusCode = StatusCode.OK;
@@ -118,9 +118,9 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-                _classRepository.Update(obj);
+                _classRepository.Update(@class);
 
-                baseResponse.Data = obj;
+                baseResponse.Data = @class;
                 baseResponse.Description = "успешно";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;

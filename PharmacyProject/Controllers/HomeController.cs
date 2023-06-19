@@ -102,6 +102,7 @@ public class HomeController : Controller
         int? pharmacyId = HttpContext.Session.GetInt32("PharmacyId");
         int employeeId = random.Next(7, 186);
         var date = DateTime.UtcNow;
+        /*временное заполнени*/
         if (pharmacyId.HasValue)
         {
             Order order = new Order()
@@ -118,6 +119,7 @@ public class HomeController : Controller
             var orders = await _orderService.GetAll();
             var dataOrder = orders.Data.Last();
             var orderId = dataOrder.Id;
+            /* временное заполнение*/
             OrdDrug ordDrug = new OrdDrug()
             {
                 OrderId = orderId,
