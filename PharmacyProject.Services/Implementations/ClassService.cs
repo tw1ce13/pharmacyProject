@@ -54,85 +54,52 @@ namespace PharmacyProject.Services.Implementations
         public async Task<IBaseResponse<Class>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Class>();
-            try
+            var obj = await _classRepository.GetById(id, token);
+            if (obj == null)
             {
-                var obj = await _classRepository.GetById(id, token);
-                if (obj == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = obj;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Class>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+            baseResponse.Data = obj;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Class>>> GetAll()
         {
             var baseResponse = new BaseResponse<IEnumerable<Class>>();
-            try
+            var obj = await _classRepository.GetAll();
+            if (obj == null)
             {
-                var obj = await _classRepository.GetAll();
-                if (obj == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = obj;
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Class>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = obj;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
-        public  IBaseResponse<Class> Update(Class @class)
+        public IBaseResponse<Class> Update(Class @class)
         {
             var baseResponse = new BaseResponse<Class>();
-            try
+            if (@class == null)
             {
-                if (@class == null)
-                {
-                    baseResponse.Description = "Объект не найден";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-
-
-                _classRepository.Update(@class);
-
-                baseResponse.Data = @class;
-                baseResponse.Description = "успешно";
+                baseResponse.Description = "Объект не найден";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Class>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+
+
+
+            _classRepository.Update(@class);
+
+            baseResponse.Data = @class;
+            baseResponse.Description = "успешно";
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
     }
 }

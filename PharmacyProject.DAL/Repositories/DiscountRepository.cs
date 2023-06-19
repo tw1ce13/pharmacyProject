@@ -37,7 +37,7 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<Discount> GetbyName(string name)
         {
-            var obj = await _context.Discounts.FindAsync(name);
+            var obj = await _context.Discounts.FirstOrDefaultAsync(x=>x.Name == name);
             return obj!;
         }
 

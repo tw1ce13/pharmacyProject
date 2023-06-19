@@ -69,7 +69,6 @@ builder.Services.AddScoped<IPharmacyService, PharmacyService>();
 builder.Services.AddScoped<IRecipeDrugService, RecipeDrugService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IWebService, WebService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 
 
 builder.Services.AddTransient<IAvailabilityRepository, AvailabilityRepository>();

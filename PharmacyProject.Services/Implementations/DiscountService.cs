@@ -47,84 +47,53 @@ namespace PharmacyProject.Services.Implementations
         public async Task<IBaseResponse<Discount>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Discount>();
-            try
+            var discount = await _discountRepository.GetById(id, token);
+            if (discount == null)
             {
-                var discount = await _discountRepository.GetById(id, token);
-                if (discount == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = discount;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Discount>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+            baseResponse.Data = discount;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
+
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Discount>>> GetAll()
         {
             var baseResponse = new BaseResponse<IEnumerable<Discount>>();
-            try
+            var discount = await _discountRepository.GetAll();
+            if (discount == null)
             {
-                var discount = await _discountRepository.GetAll();
-                if (discount == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = discount;
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Discount>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = discount;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
         public IBaseResponse<Discount> Update(Discount obj)
         {
             var baseResponse = new BaseResponse<Discount>();
-            try
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    baseResponse.Description = "Объект не найден";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-
-                _discountRepository.Update(obj);
-
-                baseResponse.Data = obj;
-                baseResponse.Description = "успешно";
+                baseResponse.Description = "Объект не найден";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Discount>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+
+
+            _discountRepository.Update(obj);
+
+            baseResponse.Data = obj;
+            baseResponse.Description = "успешно";
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
+
         }
     }
 }

@@ -37,9 +37,8 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<IEnumerable<Availability>> GetAvailabilitiesByPharmacyId(int pharmacyId)
         {
-            var availabilities = await _context.Availabilities.ToListAsync();
-            var result = availabilities.Where(avail => avail.PharmacyId == pharmacyId);
-            return result;
+            var availabilities = await _context.Availabilities.Where(x=>x.PharmacyId == pharmacyId).ToListAsync();
+            return availabilities;
         }
 
         public async Task<Availability> GetById(int id, CancellationToken token)

@@ -48,137 +48,82 @@ namespace PharmacyProject.Services.Implementations
         public async Task<IBaseResponse<Availability>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Availability>();
-            try
+            var availability = await _availabilityRepository.GetById(id, token);
+
+            if (availability == null)
             {
-                var availability = await _availabilityRepository.GetById(id, token);
-
-                if (availability == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-                baseResponse.Data = availability;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Availability>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+
+            baseResponse.Data = availability;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Availability>>> GetAll()
         {
             var baseResponse = new BaseResponse<IEnumerable<Availability>>();
-            try
+            var availabilities = await _availabilityRepository.GetAll();
+            if (availabilities == null)
             {
-                var availabilities = await _availabilityRepository.GetAll();
-                if (availabilities == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = availabilities;
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Availability>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = availabilities;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
         public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilitiesByPharmacyId(int pharmacyId)
         {
             var baseResponse = new BaseResponse<IEnumerable<Availability>>();
-            try
+            var list = await _availabilityRepository.GetAvailabilitiesByPharmacyId(pharmacyId);
+            if (list == null)
             {
-                var list = await _availabilityRepository.GetAvailabilitiesByPharmacyId(pharmacyId);
-                if (list == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.ObjectNotFound;
-                    return baseResponse;
-                }
-                baseResponse.Data = list;
-                baseResponse.StatusCode = StatusCode.OK;
+                baseResponse.Description = "Найдено 0 элементов";
+                baseResponse.StatusCode = StatusCode.ObjectNotFound;
                 return baseResponse;
             }
-            catch(Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Availability>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = list;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
         public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId)
         {
             var baseResponse = new BaseResponse<IEnumerable<Availability>>();
-            try
+            var list = await _availabilityRepository.GetAvailabilityByDelivery(deliveriesId);
+            if (list == null)
             {
-                var list = await _availabilityRepository.GetAvailabilityByDelivery(deliveriesId);
-                if (list == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.ObjectNotFound;
-                    return baseResponse;
-                }
-                baseResponse.Data = list;
-                baseResponse.StatusCode = StatusCode.OK;
+                baseResponse.Description = "Найдено 0 элементов";
+                baseResponse.StatusCode = StatusCode.ObjectNotFound;
                 return baseResponse;
             }
-            catch(Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Availability>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = list;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
         public IBaseResponse<Availability> Update(Availability obj)
         {
             var baseResponse = new BaseResponse<Availability>();
-            try
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    baseResponse.Description = "Объект не найден";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-                _availabilityRepository.Update(obj);
-
-                baseResponse.Data = obj;
-                baseResponse.Description = "успешно";
+                baseResponse.Description = "Объект не найден";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Availability>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+
+            _availabilityRepository.Update(obj);
+
+            baseResponse.Data = obj;
+            baseResponse.Description = "успешно";
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
     }
 }

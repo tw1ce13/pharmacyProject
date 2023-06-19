@@ -49,127 +49,85 @@ namespace PharmacyProject.Services.Implementations
         public async Task<IBaseResponse<Drug>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Drug>();
-            try
+            var drug = await _drugRepository.GetById(id, token);
+            if (drug == null)
             {
-                var drug = await _drugRepository.GetById(id, token);
-                if (drug == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = drug;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Drug>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+            baseResponse.Data = drug;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Drug>>> GetAll(CancellationToken cancellationToken)
         {
             var baseResponse = new BaseResponse<IEnumerable<Drug>>();
-            try
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return new BaseResponse<IEnumerable<Drug>>()
-                    {
-                        StatusCode = StatusCode.Cancelled,
-                        Description = "Операция была отменена."
-                    };
-                }
-
-                var drug = await _drugRepository.GetAll();
-
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return new BaseResponse<IEnumerable<Drug>>()
-                    {
-                        StatusCode = StatusCode.Cancelled,
-                        Description = "Операция была отменена после выполнения."
-                    };
-                }
-
-                if (drug == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = drug;
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            catch (Exception ex)
+            if (cancellationToken.IsCancellationRequested)
             {
                 return new BaseResponse<IEnumerable<Drug>>()
                 {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
+                    StatusCode = StatusCode.Cancelled,
+                    Description = "Операция была отменена."
                 };
             }
+
+            var drug = await _drugRepository.GetAll();
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return new BaseResponse<IEnumerable<Drug>>()
+                {
+                    StatusCode = StatusCode.Cancelled,
+                    Description = "Операция была отменена после выполнения."
+                };
+            }
+
+            if (drug == null)
+            {
+                baseResponse.Description = "Найдено 0 элементов";
+                baseResponse.StatusCode = StatusCode.OK;
+                return baseResponse;
+            }
+            baseResponse.Data = drug;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
+
         }
 
         public async Task<BaseResponse<IEnumerable<DrugInOrder>>> GetDrugInOrders(IEnumerable<Order> orders, IEnumerable<OrdDrug> ordDrugs, int userId)
         {
             var baseResponse = new BaseResponse<IEnumerable<DrugInOrder>>();
-            try
-            {
-                var list = await _drugRepository.GetDrugInOrders(orders, ordDrugs, userId);
+            var list = await _drugRepository.GetDrugInOrders(orders, ordDrugs, userId);
 
-                if (list == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = list;
+            if (list == null)
+            {
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<DrugInOrder>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = list;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<BaseResponse<IEnumerable<DrugResult>>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<Class> classes, IEnumerable<Delivery> deliveries)
         {
             var baseResponse = new BaseResponse<IEnumerable<DrugResult>>();
-            try
+            var list = await _drugRepository.GetDrugs(availabilities, classes, deliveries);
+            if (list == null)
             {
-                var list = await _drugRepository.GetDrugs(availabilities, classes, deliveries);
-                if (list == null)
-                {
-                    baseResponse.Description = "Не найдено объектов";
-                    baseResponse.StatusCode = StatusCode.ObjectNotFound;
-                    return baseResponse;
-                }
-                baseResponse.Data = list;
-                baseResponse.StatusCode = StatusCode.OK;
+                baseResponse.Description = "Не найдено объектов";
+                baseResponse.StatusCode = StatusCode.ObjectNotFound;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<DrugResult>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = list;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
+
         }
 
         public IBaseResponse<Drug> Update(Drug obj)

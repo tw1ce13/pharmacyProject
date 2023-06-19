@@ -15,7 +15,6 @@ public class HomeController : Controller
     private readonly PharmacyContext _context;
     private readonly IWebService _webService;
     private readonly IOrderService _orderService;
-    private readonly ITokenService _tokenService;
     private readonly IPharmacyService _pharmacyService;
     private readonly IDrugService _drugService;
     private readonly IAvailabilityService _availabilityService;
@@ -25,7 +24,7 @@ public class HomeController : Controller
     private readonly IDiscountService _discountService;
     private readonly IOrdDrugService _ordDrugService;
 
-    public HomeController(ITokenService tokenService, IOrdDrugService ordDrugService, IDiscountService discountService, IPatientService patientService, PharmacyContext context, IClassService classService, IOrderService orderService, IPharmacyService pharmacyService, IWebService webService, IDrugService drugService, IAvailabilityService availabilityService, IDeliveryService deliveryService)
+    public HomeController(IOrdDrugService ordDrugService, IDiscountService discountService, IPatientService patientService, PharmacyContext context, IClassService classService, IOrderService orderService, IPharmacyService pharmacyService, IWebService webService, IDrugService drugService, IAvailabilityService availabilityService, IDeliveryService deliveryService)
     {
         _context = context;
         _classService = classService;
@@ -38,11 +37,12 @@ public class HomeController : Controller
         _patientService = patientService;
         _discountService = discountService;
         _ordDrugService = ordDrugService;
-        _tokenService = tokenService;
     }
     
     public async Task<ActionResult> Index()
     {
+        Class @class = new Class();
+        _classService.Delete(@class);
         var baseResponse = await _webService.GetAll();
         var list = baseResponse.Data;
         return View(list);
@@ -86,8 +86,7 @@ public class HomeController : Controller
     public async Task<ActionResult> ShowDiscounts()
     {
         var discounts = await _discountService.GetAll();
-      
-            return View(discounts.Data);
+        return View(discounts.Data);
     }
 
 
@@ -107,7 +106,7 @@ public class HomeController : Controller
         {
             Order order = new Order()
             {
-                Date = DateTime.Now.ToUniversalTime(),
+                Date = DateTime.UtcNow,
                 DiscountId = 5,
                 PharmacyId = (int)pharmacyId,
                 PatientId = userId,

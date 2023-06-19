@@ -34,9 +34,9 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task<Patient> GetbyName(string name)
+        public async Task<Patient> GetbyName(string email)
         {
-            var obj = await _context.Patients.FindAsync(name);
+            var obj = await _context.Patients.FirstOrDefaultAsync(x=> x.Email == email);
             return obj!;
         }
 
