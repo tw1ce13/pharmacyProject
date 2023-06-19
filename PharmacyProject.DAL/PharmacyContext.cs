@@ -14,8 +14,6 @@ namespace PharmacyProject.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {        
-            modelBuilder.Entity<Availability>().HasNoKey();
-            modelBuilder.Entity<RecipeDrug>().HasNoKey();
         }
 
         public DbSet<Availability> Availabilities { get; set; }
