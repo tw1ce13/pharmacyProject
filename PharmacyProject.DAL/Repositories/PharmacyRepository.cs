@@ -12,15 +12,15 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(Pharmacy data)
+        public void Add(Pharmacy pharmacy)
         {
-            _context.Pharmacies.Add(data);
+            _context.Pharmacies.Add(pharmacy);
             _context.SaveChangesAsync();
         }
 
-        public void Delete(Pharmacy data)
+        public void Delete(Pharmacy pharmacy)
         {
-            _context.Pharmacies.Remove(data);
+            _context.Pharmacies.Remove(pharmacy);
             _context.SaveChangesAsync();
         }
 
@@ -37,16 +37,16 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task<Pharmacy> GetbyName(string name)
+        public async Task<Pharmacy> GetbyName(string address)
         {
-            var obj = await _context.Pharmacies.FindAsync(name);
+            var obj = await _context.Pharmacies.FirstOrDefaultAsync(x=> x.Address == address);
             return obj!;
         }
 
-        public async Task Update(Pharmacy data)
+        public async Task Update(Pharmacy pharmacy)
         {
-            if (data != null)
-                _context.Pharmacies.Update(data);
+            if (pharmacy != null)
+                _context.Pharmacies.Update(pharmacy);
             await _context.SaveChangesAsync();
         }
     }
