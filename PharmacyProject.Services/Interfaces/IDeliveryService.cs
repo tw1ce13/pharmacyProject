@@ -7,7 +7,7 @@ namespace PharmacyProject.Services.Interfaces
 	public interface IDeliveryService
 	{
         Task<IBaseResponse<IEnumerable<Delivery>>> GetAll();
-        Task<IBaseResponse<Delivery>> Get(int id);
+        Task<IBaseResponse<Delivery>> Get(int id, CancellationToken token);
         IBaseResponse<Delivery> Delete(int id);
         IBaseResponse<Delivery> Delete(Delivery delivery);
         IBaseResponse<Delivery> Add(Delivery delivery);

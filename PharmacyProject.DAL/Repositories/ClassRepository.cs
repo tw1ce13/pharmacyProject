@@ -31,9 +31,9 @@ namespace PharmacyProject.DAL.Repositories
             return list;
         }
 
-        public async Task<Class> GetById(int id)
+        public async Task<Class> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Classes.FindAsync(id);
+            var obj = await _context.Classes.FirstOrDefaultAsync(x => x.ClassId == id, token);
             return obj!;
         }
 

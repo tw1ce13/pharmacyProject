@@ -45,12 +45,12 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Availability>> Get(int id)
+        public async Task<IBaseResponse<Availability>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Availability>();
             try
             {
-                var availability = await _availabilityRepository.GetById(id);
+                var availability = await _availabilityRepository.GetById(id, token);
 
                 if (availability == null)
                 {
@@ -126,12 +126,12 @@ namespace PharmacyProject.Services.Implementations
             }
         }
 
-        public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilityByDelivery(IEnumerable<Delivery> deliveries)
+        public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId)
         {
             var baseResponse = new BaseResponse<IEnumerable<Availability>>();
             try
             {
-                var list = await _availabilityRepository.GetAvailabilityByDelivery(deliveries);
+                var list = await _availabilityRepository.GetAvailabilityByDelivery(deliveriesId);
                 if (list == null)
                 {
                     baseResponse.Description = "Найдено 0 элементов";

@@ -7,7 +7,7 @@ namespace PharmacyProject.Services.Interfaces
 	public interface IRecipeDrugService
 	{
         Task<IBaseResponse<IEnumerable<RecipeDrug>>> GetAll();
-        Task<IBaseResponse<RecipeDrug>> Get(int id);
+        Task<IBaseResponse<RecipeDrug>> Get(int id, CancellationToken token);
         IBaseResponse<RecipeDrug> Delete(int id);
         IBaseResponse<RecipeDrug> Delete(RecipeDrug obj);
         IBaseResponse<RecipeDrug> Add(RecipeDrug obj);

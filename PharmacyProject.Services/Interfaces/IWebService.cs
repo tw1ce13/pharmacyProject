@@ -7,7 +7,7 @@ namespace PharmacyProject.Services.Interfaces
 	public interface IWebService
 	{
         Task<IBaseResponse<IEnumerable<Web>>> GetAll();
-        Task<IBaseResponse<Web>> Get(int id);
+        Task<IBaseResponse<Web>> Get(int id, CancellationToken token);
         IBaseResponse<Web> Delete(int id);
         IBaseResponse<Web> Delete(Web web);
         IBaseResponse<Web> Add(Web web);

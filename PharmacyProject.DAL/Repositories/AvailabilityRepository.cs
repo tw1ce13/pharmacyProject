@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Models;
 
@@ -25,13 +26,10 @@ namespace PharmacyProject.DAL.Repositories
             _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<Delivery> deliveries)
+        public async Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId)
         {
-            var list = await _context.Availabilities.ToListAsync();
-            var result = from item in list
-                         join delivery in deliveries on item.DeliveryId equals delivery.Id
-                         select item;
-            return result;
+            var list = await _context.Availabilities.Where(x => deliveriesId.Contains(x.DeliveryId)).ToListAsync();
+            return list;
         }
 
         public async Task<IEnumerable<Availability>> GetAll()
@@ -47,17 +45,12 @@ namespace PharmacyProject.DAL.Repositories
             return result;
         }
 
-        public async Task<Availability> GetById(int id)
+        public async Task<Availability> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Availabilities.FindAsync(id);
+            var obj = await _context.Availabilities.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
-        public async Task<Availability> GetbyName(string name)
-        {
-            var obj = await _context.Availabilities.FindAsync(name);
-            return obj!;
-        }
 
         public async Task Update(Availability data)
         {

@@ -7,7 +7,7 @@ namespace PharmacyProject.Services.Interfaces
     public interface IClassService
     {
         Task<IBaseResponse<IEnumerable<Class>>> GetAll();
-        Task<IBaseResponse<Class>> Get(int id);
+        Task<IBaseResponse<Class>> Get(int id, CancellationToken token);
         IBaseResponse<Class> Delete(int id);
         IBaseResponse<Class> Delete(Class obj);
         IBaseResponse<Class> Add(Class obj);

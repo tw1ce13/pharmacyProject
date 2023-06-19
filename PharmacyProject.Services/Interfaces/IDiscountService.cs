@@ -7,7 +7,7 @@ namespace PharmacyProject.Services.Interfaces
 	public interface IDiscountService
 	{
         Task<IBaseResponse<IEnumerable<Discount>>> GetAll();
-        Task<IBaseResponse<Discount>> Get(int id);
+        Task<IBaseResponse<Discount>> Get(int id, CancellationToken token);
         IBaseResponse<Discount> Delete(int id);
         IBaseResponse<Discount> Delete(Discount obj);
         IBaseResponse<Discount> Add(Discount obj);

@@ -7,7 +7,7 @@ namespace PharmacyProject.Services.Interfaces
 	public interface IOrdDrugService
 	{
         Task<IBaseResponse<IEnumerable<OrdDrug>>> GetAll();
-        Task<IBaseResponse<OrdDrug>> Get(int id);
+        Task<IBaseResponse<OrdDrug>> Get(int id, CancellationToken token);
         IBaseResponse<OrdDrug> Delete(int id);
         IBaseResponse<OrdDrug> Delete(OrdDrug obj);
         IBaseResponse<OrdDrug> DeleteRange(IEnumerable<OrdDrug> ordDrugs);

@@ -32,9 +32,9 @@ namespace PharmacyProject.DAL.Repositories
             return list;
         }
 
-        public async Task<Drug> GetById(int id)
+        public async Task<Drug> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Drugs.FindAsync(id);
+            var obj = await _context.Drugs.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
@@ -56,7 +56,7 @@ namespace PharmacyProject.DAL.Repositories
                               Price = ordDrug.Price,
                               Date = order.Date,
                               Count = ordDrug.Count
-                          });
+                          }).Distinct();
             return result;
         }
 

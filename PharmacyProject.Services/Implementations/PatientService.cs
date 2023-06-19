@@ -45,12 +45,12 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Patient>> Get(int id)
+        public async Task<IBaseResponse<Patient>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Patient>();
             try
             {
-                var patient = await _patientRepository.GetById(id);
+                var patient = await _patientRepository.GetById(id, token);
                 if (patient == null)
                 {
                     baseResponse.Description = "Не найдено";

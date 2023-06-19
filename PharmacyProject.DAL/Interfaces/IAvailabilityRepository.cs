@@ -6,7 +6,7 @@ namespace PharmacyProject.DAL.Interfaces
 	public interface IAvailabilityRepository : IBaseRepository<Availability>
 	{
 		Task<IEnumerable<Availability>> GetAvailabilitiesByPharmacyId(int pharmacyId);
-		Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<Delivery> deliveries);
+		Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId);
 	}
 }
 

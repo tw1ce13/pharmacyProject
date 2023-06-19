@@ -62,7 +62,7 @@ public class HomeController : Controller
         var baseResponseDrug = await _drugService.GetAll(cancellationToken);
         var baseResponseAvailability = await _availabilityService.GetAvailabilitiesByPharmacyId(pharmacyId);
         var baseResponseDelivery = await _deliveryService.GetFresh();
-        var baseResponseAvailabilityFresh = await _availabilityService.GetAvailabilityByDelivery(baseResponseDelivery.Data);
+        var baseResponseAvailabilityFresh = await _availabilityService.GetAvailabilityByDelivery(baseResponseDelivery.Data.Select(x=>x.Id));
         var baseResponseClass = await _classService.GetAll();
         var availabilities = from availability in baseResponseAvailability.Data
                              join avail in baseResponseAvailabilityFresh.Data on new { availability.PharmacyId, availability.DeliveryId }
@@ -92,7 +92,7 @@ public class HomeController : Controller
 
 
     [HttpPost]
-    public async Task<ActionResult> AddToOrder(int itemId, int quantity)
+    public async Task<ActionResult> AddToOrder(int itemId, int quantity, CancellationToken token)
     {
         var patients = await _patientService.GetAll();
         var dataPatient = patients.Data.Last();
@@ -114,7 +114,7 @@ public class HomeController : Controller
             };
             _orderService.Add(order);
 
-            var drug = await _drugService.Get(itemId);
+            var drug = await _drugService.Get(itemId, token);
             var orders = await _orderService.GetAll();
             var dataOrder = orders.Data.Last();
             var orderId = dataOrder.Id;
