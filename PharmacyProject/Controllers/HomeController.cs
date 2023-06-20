@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace PharmacyProject.Controllers;
 public class HomeController : Controller
 {
-    private readonly PharmacyContext _context;
     private readonly IWebService _webService;
     private readonly IOrderService _orderService;
     private readonly IPharmacyService _pharmacyService;
@@ -24,9 +23,8 @@ public class HomeController : Controller
     private readonly IDiscountService _discountService;
     private readonly IOrdDrugService _ordDrugService;
 
-    public HomeController(IOrdDrugService ordDrugService, IDiscountService discountService, IPatientService patientService, PharmacyContext context, IClassService classService, IOrderService orderService, IPharmacyService pharmacyService, IWebService webService, IDrugService drugService, IAvailabilityService availabilityService, IDeliveryService deliveryService)
+    public HomeController(IOrdDrugService ordDrugService, IDiscountService discountService, IPatientService patientService, IClassService classService, IOrderService orderService, IPharmacyService pharmacyService, IWebService webService, IDrugService drugService, IAvailabilityService availabilityService, IDeliveryService deliveryService)
     {
-        _context = context;
         _classService = classService;
         _orderService = orderService;
         _pharmacyService = pharmacyService;
@@ -126,7 +124,7 @@ public class HomeController : Controller
                 Price = quantity * drug.Data.Cost
             };
             await _ordDrugService.Add(ordDrug);
-            return RedirectToAction("GetDrugs", "Home", new { selectedOption2 = pharmacyId });
+            return RedirectToAction("GetDrugs", "Home", new { pharmacyId = pharmacyId, token });
         }
         return RedirectToAction("Register", "Home");
     }
