@@ -40,6 +40,7 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
+
         public async Task Update(Web web)
         {
             if (web != null)

@@ -28,6 +28,7 @@ namespace PharmacyProject.DAL.Repositories
         public async Task<IEnumerable<Recipe>> GetAll()=>
             await _context.Recipes.ToListAsync();
 
+
         public async Task<Recipe> GetById(int id, CancellationToken token)
         {
             var obj = await _context.Recipes.FirstOrDefaultAsync(x => x.Id == id, token);

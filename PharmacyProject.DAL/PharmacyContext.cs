@@ -9,7 +9,6 @@ namespace PharmacyProject.DAL
 
 		public PharmacyContext(DbContextOptions<PharmacyContext> options) : base(options)
 		{
-
 		}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
