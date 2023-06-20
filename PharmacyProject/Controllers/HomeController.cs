@@ -79,9 +79,6 @@ public class HomeController : Controller
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult> ShowDiscounts()
     {
-        var token = HttpContext.Request.Headers["Authorization"];
-        Console.WriteLine("Token: " + token);
-
         var discounts = await _discountService.GetAll();
         return View(discounts.Data);
     }
