@@ -35,12 +35,7 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<Drug> GetById(int id, CancellationToken token)
         {
-<<<<<<< HEAD
             var obj = await _context.Drugs.FirstOrDefaultAsync(x=>x.Id == id, token);
-=======
-	/*Exception если использую await _context.Drugs.FirstOrDefaultAsync(x=>x.Id == id, token)*/
-            var obj = await _context.Drugs.FindAsync(id, token);
->>>>>>> f1ca507b801f8535f1a83bf799af80bdab26febc
             return obj!;
         }
 
