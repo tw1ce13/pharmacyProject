@@ -67,7 +67,7 @@ namespace PharmacyProject.DAL.Repositories
                                     Date = DateTime.UtcNow,
                                     Count = g.Sum(d => d.Count)
                                 });
-
+            
             return drugInOrders;
         }
 
