@@ -41,8 +41,6 @@ public class HomeController : Controller
     
     public async Task<ActionResult> Index()
     {
-        Class @class = new Class();
-        _classService.Delete(@class);
         var baseResponse = await _webService.GetAll();
         var list = baseResponse.Data;
         return View(list);
@@ -56,6 +54,7 @@ public class HomeController : Controller
         ViewBag.Pharmacy = pharmacies;
         return PartialView("_PharmacyAddressesPartialView", ViewBag.Pharmacy);
     }
+
     public async Task<ActionResult> GetDrugs(int pharmacyId, CancellationToken cancellationToken)
     {
         HttpContext.Session.SetInt32("PharmacyId", pharmacyId);
@@ -75,11 +74,6 @@ public class HomeController : Controller
 
     public ActionResult Register()
     {
-        var flag = TempData["Flag"];
-        if (flag != null)
-            ViewBag.Flag = TempData["Flag"];
-        else
-            ViewBag.Flag = true;
         return View();
     }
 
@@ -179,11 +173,11 @@ public class HomeController : Controller
     {
         var users = await _patientService.GetAll();
         var user = users.Data.FirstOrDefault(p => p.Email == email && p.Password == password);
-        if (user != null )
+        if (user != null)
         {
             var claims = new List<Claim>
             {
-                new Claim("Name", email)
+                new Claim("E-mail", email)
             };
 
             ClaimsIdentity claimsIdentity =

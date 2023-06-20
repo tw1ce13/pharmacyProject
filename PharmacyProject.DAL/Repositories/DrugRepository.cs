@@ -72,7 +72,7 @@ namespace PharmacyProject.DAL.Repositories
                              Cost = drug.Cost,
                              Count = availability.Count,
                              Type = obj.Type,
-                             ExpirationData = delivery.ExpirationData
+                             ExpirationDate = delivery.ExpirationDate
                          };
             return result;
         }

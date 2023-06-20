@@ -36,7 +36,7 @@
                     <td>@item.Type</td>
                     <td>@item.Cost</td>
                     <td>@item.Count</td>
-                    <td>@item.ExpirationData.ToShortDateString()</td>
+                    <td>@item.ExpirationDate.ToShortDateString()</td>
                     <td>
                         <form method="post" action="@Url.Action("AddToOrder", "Home")">
                             @Html.AntiForgeryToken()

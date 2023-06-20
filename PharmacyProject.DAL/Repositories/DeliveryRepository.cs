@@ -43,7 +43,7 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<IEnumerable<Delivery>> GetFresh()
         {
-            var list = await _context.Deliveries.Where(x=>x.ExpirationData>=DateTime.Now).ToListAsync();
+            var list = await _context.Deliveries.Where(x=>x.ExpirationDate>=DateTime.Now).ToListAsync();
             return list;
         }
 
