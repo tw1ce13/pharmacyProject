@@ -50,20 +50,25 @@ namespace PharmacyProject.DAL.Repositories
         public async Task<IEnumerable<DrugInOrder>> GetDrugInOrders(IEnumerable<Order> orders, IEnumerable<OrdDrug> ordDrugs, int userId)
         {
             var drugs = await _context.Drugs.ToListAsync();
-            var result = (from drug in drugs
-                          join order in orders on userId equals order.PatientId
-                          join ordDrug in ordDrugs on drug.Id equals ordDrug.DrugId
-                          select new DrugInOrder
-                          {
-                              Name = drug.Name,
-                              Price = ordDrug.Price,
-                              Date = order.Date,
-                              Count = ordDrug.Count
-                          })
-              .GroupBy(d => new { d.Name, d.Price, d.Date, d.Count })
-              .Select(g => g.First());
+            var drugInOrders = (from drug in drugs
+                                join ordDrug in ordDrugs on drug.Id equals ordDrug.DrugId
+                                select new DrugInOrder
+                                {
+                                    Name = drug.Name,
+                                    Price = ordDrug.Price,
+                                    Date = DateTime.UtcNow,
+                                    Count = ordDrug.Count
+                                })
+                                .GroupBy(d => d.Name)
+                                .Select(g => new DrugInOrder
+                                {
+                                    Name = g.Key,
+                                    Price = g.First().Price,
+                                    Date = DateTime.UtcNow,
+                                    Count = g.Sum(d => d.Count)
+                                });
 
-            return result;
+            return drugInOrders;
         }
 
 

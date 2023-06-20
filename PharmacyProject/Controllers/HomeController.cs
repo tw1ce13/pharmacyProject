@@ -47,15 +47,15 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<ActionResult> GetPharmacyAddresses(int webId)
     {
-        var baseResponse = await _pharmacyService.GetAll();
-        var pharmacies = baseResponse.Data.Where(p => p.IdWeb == webId);
-        ViewBag.Pharmacy = pharmacies;
-        return PartialView("_PharmacyAddressesPartialView", ViewBag.Pharmacy);
+        var baseResponsePharmacy = await _pharmacyService.GetAll();
+        var pharmacies = baseResponsePharmacy.Data.Where(p => p.IdWeb == webId);
+        return PartialView("_PharmacyAddressesPartialView", pharmacies);
     }
 
     public async Task<ActionResult> GetDrugs(int pharmacyId, CancellationToken cancellationToken)
     {
         HttpContext.Session.SetInt32("PharmacyId", pharmacyId);
+
         var baseResponseDrug = await _drugService.GetAll(cancellationToken);
         var baseResponseAvailability = await _availabilityService.GetAvailabilitiesByPharmacyId(pharmacyId);
         var baseResponseDelivery = await _deliveryService.GetFresh();
