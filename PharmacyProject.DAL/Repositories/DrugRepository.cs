@@ -8,16 +8,19 @@ namespace PharmacyProject.DAL.Repositories
 	public class DrugRepository : IDrugRepository
 	{
         private readonly PharmacyContext _context;
+
 		public DrugRepository(PharmacyContext context)
 		{
             _context = context;
 		}
+
 
         public void Add(Drug drug)
         {
             _context.Drugs.Add(drug);
             _context.SaveChangesAsync();
         }
+
 
         public void Delete(Drug drug)
         {
@@ -29,17 +32,20 @@ namespace PharmacyProject.DAL.Repositories
         public async Task<IEnumerable<Drug>> GetAll()=>
             await _context.Drugs.ToListAsync();
 
+
         public async Task<Drug> GetById(int id, CancellationToken token)
         {
             var obj = await _context.Drugs.FindAsync(id, token);
             return obj!;
         }
 
+
         public async Task<Drug> GetbyName(string name)
         {
             var obj = await _context.Drugs.FindAsync(name);
             return obj!;
         }
+
 
         public async Task<IEnumerable<DrugInOrder>> GetDrugInOrders(IEnumerable<Order> orders, IEnumerable<OrdDrug> ordDrugs, int userId)
         {
@@ -60,6 +66,7 @@ namespace PharmacyProject.DAL.Repositories
             return result;
         }
 
+
         public async Task<IEnumerable<DrugResult>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<Class> classes, IEnumerable<Delivery> deliveries)
         {
             var drugs = await _context.Drugs.ToListAsync();
@@ -79,6 +86,7 @@ namespace PharmacyProject.DAL.Repositories
                          };
             return result;
         }
+
 
         public async Task Update(Drug drug)
         {

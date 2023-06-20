@@ -7,9 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using PharmacyProject.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace PharmacyProject.Controllers;
-
 public class HomeController : Controller
 {
     private readonly PharmacyContext _context;
@@ -77,8 +77,13 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult> ShowDiscounts()
     {
+        var token = HttpContext.Request.Headers["Authorization"];
+        Console.WriteLine("Token: " + token);
+
         var discounts = await _discountService.GetAll();
         return View(discounts.Data);
     }
