@@ -12,39 +12,38 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(Pharmacy data)
+        public async Task Add(Pharmacy pharmacy)
         {
-            _context.Pharmacies.Add(data);
+            _context.Pharmacies.Add(pharmacy);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Pharmacy data)
+        public async Task Delete(Pharmacy pharmacy)
         {
-            _context.Pharmacies.Remove(data);
+            _context.Pharmacies.Remove(pharmacy);
+            await _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Pharmacy>> GetAll()
-        {
-            var list = await _context.Pharmacies.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Pharmacy>> GetAll() =>
+            await _context.Pharmacies.ToListAsync();
 
-        public async Task<Pharmacy> GetById(int id)
+        public async Task<Pharmacy> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Pharmacies.FindAsync(id);
+            var obj = await _context.Pharmacies.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
-        public async Task<Pharmacy> GetbyName(string name)
+        public async Task<Pharmacy> GetByAddress(string address)
         {
-            var obj = await _context.Pharmacies.FindAsync(name);
+            var obj = await _context.Pharmacies.FirstOrDefaultAsync(x=> x.Address == address);
             return obj!;
         }
 
-        public async Task Update(Pharmacy data)
+        public async Task Update(Pharmacy pharmacy)
         {
-            if (data != null)
-                _context.Pharmacies.Update(data);
+            if (pharmacy != null)
+                _context.Pharmacies.Update(pharmacy);
             await _context.SaveChangesAsync();
         }
     }

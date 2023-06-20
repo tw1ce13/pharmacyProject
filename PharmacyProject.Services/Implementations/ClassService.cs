@@ -21,118 +21,85 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Class> Add(Class obj)
+        public async Task<IBaseResponse<Class>> Add(Class @class)
         {
-            _classRepository.Add(obj);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
+            await _classRepository.Add(@class);
+            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
 
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Class> Delete(int id)
+        public async Task<IBaseResponse<Class>> Delete(int id)
         {
             Class obj = new Class()
             {
                 ClassId = id
             };
-            _classRepository.Delete(obj);
+            await _classRepository.Delete(obj);
             var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
 
             return baseResponse;
         }
 
-        public IBaseResponse<Class> Delete(Class obj)
+        public async Task<IBaseResponse<Class>> Delete(Class @class)
         {
-            _classRepository.Delete(obj);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
+            await _classRepository.Delete(@class);
+            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
 
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Class>> Get(int id)
+        public async Task<IBaseResponse<Class>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Class>();
-            try
+            var obj = await _classRepository.GetById(id, token);
+            if (obj == null)
             {
-                var obj = await _classRepository.GetById(id);
-                if (obj == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = obj;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Class>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+            baseResponse.Data = obj;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Class>>> GetAll()
         {
             var baseResponse = new BaseResponse<IEnumerable<Class>>();
-            try
+            var obj = await _classRepository.GetAll();
+            if (obj == null)
             {
-                var obj = await _classRepository.GetAll();
-                if (obj == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = obj;
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Class>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = obj;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
-        public  IBaseResponse<Class> Update(Class obj)
+        public async Task<IBaseResponse<Class>> Update(Class @class)
         {
             var baseResponse = new BaseResponse<Class>();
-            try
+            if (@class == null)
             {
-                if (obj == null)
-                {
-                    baseResponse.Description = "Объект не найден";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-
-
-                _classRepository.Update(obj);
-
-                baseResponse.Data = obj;
-                baseResponse.Description = "успешно";
+                baseResponse.Description = "Объект не найден";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Class>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+
+
+
+            await _classRepository.Update(@class);
+
+            baseResponse.Data = @class;
+            baseResponse.Description = "успешно";
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
     }
 }

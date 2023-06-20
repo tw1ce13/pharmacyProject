@@ -1,27 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PharmacyProject.DAL;
 using PharmacyProject.Domain.Models;
 using PharmacyProject.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Microsoft.IdentityModel.Tokens;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace PharmacyProject.Controllers;
-
 public class HomeController : Controller
 {
-    private readonly PharmacyContext _context;
     private readonly IWebService _webService;
     private readonly IOrderService _orderService;
-    private readonly ITokenService _tokenService;
     private readonly IPharmacyService _pharmacyService;
     private readonly IDrugService _drugService;
     private readonly IAvailabilityService _availabilityService;
@@ -31,9 +23,8 @@ public class HomeController : Controller
     private readonly IDiscountService _discountService;
     private readonly IOrdDrugService _ordDrugService;
 
-    public HomeController(ITokenService tokenService, IOrdDrugService ordDrugService, IDiscountService discountService, IPatientService patientService, PharmacyContext context, IClassService classService, IOrderService orderService, IPharmacyService pharmacyService, IWebService webService, IDrugService drugService, IAvailabilityService availabilityService, IDeliveryService deliveryService)
+    public HomeController(IOrdDrugService ordDrugService, IDiscountService discountService, IPatientService patientService, IClassService classService, IOrderService orderService, IPharmacyService pharmacyService, IWebService webService, IDrugService drugService, IAvailabilityService availabilityService, IDeliveryService deliveryService)
     {
-        _context = context;
         _classService = classService;
         _orderService = orderService;
         _pharmacyService = pharmacyService;
@@ -44,7 +35,6 @@ public class HomeController : Controller
         _patientService = patientService;
         _discountService = discountService;
         _ordDrugService = ordDrugService;
-        _tokenService = tokenService;
     }
     
     public async Task<ActionResult> Index()
@@ -57,18 +47,19 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<ActionResult> GetPharmacyAddresses(int webId)
     {
-        var baseResponse = await _pharmacyService.GetAll();
-        var pharmacies = baseResponse.Data.Where(p => p.IdWeb == webId);
-        ViewBag.Pharmacy = pharmacies;
-        return PartialView("_PharmacyAddressesPartialView", ViewBag.Pharmacy);
+        var baseResponsePharmacy = await _pharmacyService.GetAll();
+        var pharmacies = baseResponsePharmacy.Data.Where(p => p.IdWeb == webId);
+        return PartialView("_PharmacyAddressesPartialView", pharmacies);
     }
+
     public async Task<ActionResult> GetDrugs(int pharmacyId, CancellationToken cancellationToken)
     {
         HttpContext.Session.SetInt32("PharmacyId", pharmacyId);
+
         var baseResponseDrug = await _drugService.GetAll(cancellationToken);
         var baseResponseAvailability = await _availabilityService.GetAvailabilitiesByPharmacyId(pharmacyId);
         var baseResponseDelivery = await _deliveryService.GetFresh();
-        var baseResponseAvailabilityFresh = await _availabilityService.GetAvailabilityByDelivery(baseResponseDelivery.Data);
+        var baseResponseAvailabilityFresh = await _availabilityService.GetAvailabilityByDelivery(baseResponseDelivery.Data.Select(x=>x.Id));
         var baseResponseClass = await _classService.GetAll();
         var availabilities = from availability in baseResponseAvailability.Data
                              join avail in baseResponseAvailabilityFresh.Data on new { availability.PharmacyId, availability.DeliveryId }
@@ -81,49 +72,46 @@ public class HomeController : Controller
 
     public ActionResult Register()
     {
-        var flag = TempData["Flag"];
-        if (flag != null)
-            ViewBag.Flag = TempData["Flag"];
-        else
-            ViewBag.Flag = true;
         return View();
     }
 
-    [Authorize]
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult> ShowDiscounts()
     {
         var discounts = await _discountService.GetAll();
-      
-            return View(discounts.Data);
+        return View(discounts.Data);
     }
 
 
     [HttpPost]
-    public async Task<ActionResult> AddToOrder(int itemId, int quantity)
+    public async Task<ActionResult> AddToOrder(int itemId, int quantity, CancellationToken token)
     {
         var patients = await _patientService.GetAll();
-        var dataPatient = patients.Data.Last();
-        var userId = dataPatient.Id;
+        var userId = patients.Data.Last().Id;
         HttpContext.Session.SetInt32("UserId", userId);
         Random random = new Random();
         int? pharmacyId = HttpContext.Session.GetInt32("PharmacyId");
         int employeeId = random.Next(7, 186);
+        var date = DateTime.UtcNow;
+        /*временное заполнение*/
         if (pharmacyId.HasValue)
         {
             Order order = new Order()
             {
-                Date = DateTime.Now.ToUniversalTime(),
+                Date = DateTime.UtcNow,
                 DiscountId = 5,
                 PharmacyId = (int)pharmacyId,
                 PatientId = userId,
                 EmployeeId = employeeId
             };
-            _orderService.Add(order);
+            await _orderService.Add(order);
 
-            var drug = await _drugService.Get(itemId);
+            var drug = await _drugService.Get(itemId, token);
             var orders = await _orderService.GetAll();
             var dataOrder = orders.Data.Last();
             var orderId = dataOrder.Id;
+            /* временное заполнение*/
             OrdDrug ordDrug = new OrdDrug()
             {
                 OrderId = orderId,
@@ -132,8 +120,8 @@ public class HomeController : Controller
                 Count = quantity,
                 Price = quantity * drug.Data.Cost
             };
-            _ordDrugService.Add(ordDrug);
-            return RedirectToAction("GetDrugs", "Home", new { selectedOption2 = pharmacyId });
+            await _ordDrugService.Add(ordDrug);
+            return RedirectToAction("GetDrugs", "Home", new { pharmacyId = pharmacyId, token });
         }
         return RedirectToAction("Register", "Home");
     }
@@ -173,7 +161,7 @@ public class HomeController : Controller
 
         var response = new
         {
-            access_token = encodedJwt,
+            access_token = encodedJwt
         };
 
         return Json(response);
@@ -184,11 +172,11 @@ public class HomeController : Controller
     {
         var users = await _patientService.GetAll();
         var user = users.Data.FirstOrDefault(p => p.Email == email && p.Password == password);
-        if (user != null )
+        if (user != null)
         {
             var claims = new List<Claim>
             {
-                new Claim("Name", email)
+                new Claim("E-mail", email)
             };
 
             ClaimsIdentity claimsIdentity =

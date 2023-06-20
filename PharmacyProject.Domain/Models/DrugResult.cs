@@ -10,7 +10,7 @@ namespace PharmacyProject.Domain.Models
         public decimal Cost { get; set; }
         public int Count { get; set; }
         public string? Type { get; set; }
-        public DateTime ExpirationData { get; set; }
+        public DateTime ExpirationDate { get; set; }
     }
 }
 

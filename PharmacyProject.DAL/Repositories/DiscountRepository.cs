@@ -13,39 +13,38 @@ namespace PharmacyProject.DAL.Repositories
             _context = context;
         }
 
-        public void Add(Discount data)
+        public async Task Add(Discount discount)
         {
-            _context.Discounts.Add(data);
+            _context.Discounts.Add(discount);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Discount data)
+        public async Task Delete(Discount discount)
         {
-            _context.Discounts.Remove(data);
+            _context.Discounts.Remove(discount);
+            await _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Discount>> GetAll()
-        {
-            var list = await _context.Discounts.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Discount>> GetAll()=>
+            await _context.Discounts.ToListAsync();
 
-        public async Task<Discount> GetById(int id)
+        public async Task<Discount> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Discounts.FindAsync(id);
+            var obj = await _context.Discounts.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
         public async Task<Discount> GetbyName(string name)
         {
-            var obj = await _context.Discounts.FindAsync(name);
+            var obj = await _context.Discounts.FirstOrDefaultAsync(x=>x.Name == name);
             return obj!;
         }
 
-        public async Task Update(Discount data)
+        public async Task Update(Discount discount)
         {
-            if (data != null)
-                _context.Discounts.Update(data);
+            if (discount != null)
+                _context.Discounts.Update(discount);
             await _context.SaveChangesAsync();
         }
     }

@@ -12,39 +12,38 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(Web data)
+        public async Task Add(Web web)
         {
-            _context.Webs.Add(data);
+            _context.Webs.Add(web);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Web data)
+        public async Task Delete(Web web)
         {
-            _context.Webs.Remove(data);
+            _context.Webs.Remove(web);
+            await _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Web>> GetAll()
-        {
-            var list = await _context.Webs.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Web>> GetAll()=>
+            await _context.Webs.ToListAsync();
 
-        public async Task<Web> GetById(int id)
+        public async Task<Web> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Webs.FindAsync(id);
+            var obj = await _context.Webs.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
         public async Task<Web> GetbyName(string name)
         {
-            var obj = await _context.Webs.FindAsync(name);
+            var obj = await _context.Webs.FirstOrDefaultAsync(x=> x.Name == name);
             return obj!;
         }
 
-        public async Task Update(Web data)
+        public async Task Update(Web web)
         {
-            if (data != null)
-                _context.Webs.Update(data);
+            if (web != null)
+                _context.Webs.Update(web);
             await _context.SaveChangesAsync();
         }
     }

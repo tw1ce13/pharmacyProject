@@ -8,55 +8,69 @@ namespace PharmacyProject.DAL.Repositories
 	public class DrugRepository : IDrugRepository
 	{
         private readonly PharmacyContext _context;
+
 		public DrugRepository(PharmacyContext context)
 		{
             _context = context;
 		}
 
-        public void Add(Drug data)
-        {
-            _context.Drugs.Add(data);
-        }
 
-        public void Delete(Drug data)
+        public async Task Add(Drug drug)
         {
-            _context.Drugs.Remove(data);
+            _context.Drugs.Add(drug);
+            await _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Drug>> GetAll()
+        public async Task Delete(Drug drug)
         {
-            var list = await _context.Drugs.ToListAsync();
-            return list;
+            _context.Drugs.Remove(drug);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<Drug> GetById(int id)
+
+        public async Task<IEnumerable<Drug>> GetAll()=>
+            await _context.Drugs.ToListAsync();
+
+
+        public async Task<Drug> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Drugs.FindAsync(id);
+            var obj = await _context.Drugs.FirstOrDefaultAsync(x=>x.Id == id, token);
             return obj!;
         }
+
 
         public async Task<Drug> GetbyName(string name)
         {
-            var obj = await _context.Drugs.FindAsync(name);
+            var obj = await _context.Drugs.FirstOrDefaultAsync(x=>x.Name == name);
             return obj!;
         }
+
 
         public async Task<IEnumerable<DrugInOrder>> GetDrugInOrders(IEnumerable<Order> orders, IEnumerable<OrdDrug> ordDrugs, int userId)
         {
             var drugs = await _context.Drugs.ToListAsync();
-            var result = (from drug in drugs
-                          join order in orders on userId equals order.PatientId
-                          join ordDrug in ordDrugs on drug.Id equals ordDrug.DrugId
-                          select new DrugInOrder
-                          {
-                              Name = drug.Name,
-                              Price = ordDrug.Price,
-                              Date = order.Date,
-                              Count = ordDrug.Count
-                          });
-            return result;
+            var drugInOrders = (from drug in drugs
+                                join ordDrug in ordDrugs on drug.Id equals ordDrug.DrugId
+                                select new DrugInOrder
+                                {
+                                    Name = drug.Name,
+                                    Price = ordDrug.Price,
+                                    Date = DateTime.UtcNow,
+                                    Count = ordDrug.Count
+                                })
+                                .GroupBy(d => d.Name)
+                                .Select(g => new DrugInOrder
+                                {
+                                    Name = g.Key,
+                                    Price = g.First().Price,
+                                    Date = DateTime.UtcNow,
+                                    Count = g.Sum(d => d.Count)
+                                });
+            
+            return drugInOrders;
         }
+
 
         public async Task<IEnumerable<DrugResult>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<Class> classes, IEnumerable<Delivery> deliveries)
         {
@@ -73,15 +87,16 @@ namespace PharmacyProject.DAL.Repositories
                              Cost = drug.Cost,
                              Count = availability.Count,
                              Type = obj.Type,
-                             ExpirationData = delivery.ExpirationData
+                             ExpirationDate = delivery.ExpirationDate
                          };
             return result;
         }
 
-        public async Task Update(Drug data)
+
+        public async Task Update(Drug drug)
         {
-            if (data != null)
-                _context.Drugs.Update(data);
+            if (drug != null)
+                _context.Drugs.Update(drug);
             await _context.SaveChangesAsync();
         }
     }

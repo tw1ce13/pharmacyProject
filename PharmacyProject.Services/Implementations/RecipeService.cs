@@ -21,9 +21,9 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Recipe> Add(Recipe recipe)
+        public async Task<IBaseResponse<Recipe>> Add(Recipe recipe)
         {
-            _recipeRepository.Add(recipe);
+            await _recipeRepository.Add(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 
             return baseResponse;
@@ -31,104 +31,71 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Recipe> Delete(int id)
+        public async Task<IBaseResponse<Recipe>> Delete(int id)
         {
             Recipe recipe = new Recipe() { Id = id };
-            _recipeRepository.Delete(recipe);
+            await _recipeRepository.Delete(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 
             return baseResponse;
         }
 
-        public IBaseResponse<Recipe> Delete(Recipe recipe)
+        public async Task<IBaseResponse<Recipe>> Delete(Recipe recipe)
         {
-            _recipeRepository.Delete(recipe);
+            await _recipeRepository.Delete(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Recipe>> Get(int id)
+        public async Task<IBaseResponse<Recipe>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Recipe>();
-            try
+            var recipe = await _recipeRepository.GetById(id, token);
+            if (recipe == null)
             {
-                var recipe = await _recipeRepository.GetById(id);
-                if (recipe == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = recipe;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Recipe>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+            baseResponse.Data = recipe;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Recipe>>> GetAll()
         {
             var baseResponse = new BaseResponse<IEnumerable<Recipe>>();
-            try
+            var recipe = await _recipeRepository.GetAll();
+            if (recipe == null)
             {
-                var recipe = await _recipeRepository.GetAll();
-                if (recipe == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = recipe;
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Recipe>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = recipe;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
-        public IBaseResponse<Recipe> Update(Recipe obj)
+        public async Task<IBaseResponse<Recipe>> Update(Recipe obj)
         {
             var baseResponse = new BaseResponse<Recipe>();
-            try
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    baseResponse.Description = "Объект не найден";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-
-                _recipeRepository.Update(obj);
-
-                baseResponse.Data = obj;
-                baseResponse.Description = "успешно";
+                baseResponse.Description = "Объект не найден";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Recipe>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+
+
+            await _recipeRepository.Update(obj);
+
+            baseResponse.Data = obj;
+            baseResponse.Description = "успешно";
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
     }
 }

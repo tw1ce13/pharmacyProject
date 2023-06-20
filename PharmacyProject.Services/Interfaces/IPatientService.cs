@@ -7,11 +7,11 @@ namespace PharmacyProject.Services.Interfaces
 	public interface IPatientService
 	{
         Task<IBaseResponse<IEnumerable<Patient>>> GetAll();
-        Task<IBaseResponse<Patient>> Get(int id);
-        IBaseResponse<Patient> Delete(int id);
-        IBaseResponse<Patient> Delete(Patient obj);
-        IBaseResponse<Patient> Add(Patient obj);
-        IBaseResponse<Patient> Update(Patient obj);
+        Task<IBaseResponse<Patient>> Get(int id, CancellationToken token);
+        Task<IBaseResponse<Patient>> Delete(int id);
+        Task<IBaseResponse<Patient>> Delete(Patient obj);
+        Task<IBaseResponse<Patient>> Add(Patient obj);
+        Task<IBaseResponse<Patient>> Update(Patient obj);
     }
 }
 

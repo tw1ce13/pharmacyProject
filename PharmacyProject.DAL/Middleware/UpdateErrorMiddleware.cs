@@ -33,11 +33,7 @@ namespace PharmacyProject.DAL.Middleware
         private async Task HandleUpdateErrorAsync(HttpContext context, Exception ex)
         {
             context.Response.StatusCode = (int)StatusCode.Error;
-            ErrorResponse errorResponse = new ErrorResponse
-            {
-                StatusCode = StatusCode.Error,
-                Message = ex.Message
-            };
+            var errorResponse = new ErrorResponse();
             switch (ex)
             {
                 case DbUpdateException:
@@ -45,7 +41,7 @@ namespace PharmacyProject.DAL.Middleware
                     {
                         StatusCode = StatusCode.Error,
                         Message = ex.Message,
-                        Description = "Ошибка обновления"
+                        Description = "Update Error"
                     };
                     break;
                 case NullReferenceException:
@@ -53,7 +49,15 @@ namespace PharmacyProject.DAL.Middleware
                     {
                         StatusCode = StatusCode.Error,
                         Message = ex.Message,
-                        Description = "Ссылка на объект не указывает на экземпляр объекта"
+                        Description = "There is no such object"
+                    };
+                    break;
+                case InvalidOperationException:
+                    errorResponse = new ErrorResponse
+                    {
+                        StatusCode = StatusCode.Error,
+                        Message = ex.Message,
+                        Description = "Invalid operation"
                     };
                     break;
                 default:
@@ -61,7 +65,7 @@ namespace PharmacyProject.DAL.Middleware
                     {
                         StatusCode = StatusCode.Error,
                         Message = ex.Message,
-                        Description = "Ошибка"
+                        Description = "Error"
                     };
                     break;
             }

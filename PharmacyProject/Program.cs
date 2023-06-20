@@ -15,7 +15,14 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAuthenticatedUser", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+    });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -26,9 +33,9 @@ builder.Services.AddAuthentication(options =>
 opt.RequireHttpsMetadata = false;
     opt.TokenValidationParameters = new TokenValidationParameters()
     {
-        ValidateIssuer = true,
+        ValidateIssuer = false,
         ValidIssuer = AuthOptions.issure,
-        ValidateAudience = true,
+        ValidateAudience = false,
         ValidAudience = AuthOptions.audience,
         ValidateLifetime = true,
         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
@@ -69,7 +76,6 @@ builder.Services.AddScoped<IPharmacyService, PharmacyService>();
 builder.Services.AddScoped<IRecipeDrugService, RecipeDrugService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IWebService, WebService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 
 
 builder.Services.AddTransient<IAvailabilityRepository, AvailabilityRepository>();
@@ -92,8 +98,8 @@ builder.Services.AddTransient<IBaseRepository<Web>, WebRepository>();
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -107,9 +113,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

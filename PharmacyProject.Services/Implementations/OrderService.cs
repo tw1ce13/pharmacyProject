@@ -22,19 +22,19 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Order> Add(Order ord)
+        public async Task<IBaseResponse<Order>> Add(Order ord)
         {
-            _ordRepository.Add(ord);
+            await _ordRepository.Add(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Order> Delete(int id)
+        public async Task<IBaseResponse<Order>> Delete(int id)
         {
             Order ord = new Order() { Id = id };
-            _ordRepository.Delete(ord);
+            await _ordRepository.Delete(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
         }
@@ -47,95 +47,62 @@ namespace PharmacyProject.Services.Implementations
         }
 
 
-        public IBaseResponse<Order> Delete(Order ord)
+        public async Task<IBaseResponse<Order>> Delete(Order ord)
         {
-            _ordRepository.Delete(ord);
+            await _ordRepository.Delete(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Order>> Get(int id)
+        public async Task<IBaseResponse<Order>> Get(int id, CancellationToken token)
         {
             var baseResponse = new BaseResponse<Order>();
-            try
+            var ord = await _ordRepository.GetById(id, token);
+            if (ord == null)
             {
-                var ord = await _ordRepository.GetById(id);
-                if (ord == null)
-                {
-                    baseResponse.Description = "Не найдено";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = ord;
+                baseResponse.Description = "Не найдено";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Order>()
-                {
-                    Description = ex.Message,
-                    StatusCode = StatusCode.Error
-                };
-            }
+            baseResponse.Data = ord;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
         public async Task<IBaseResponse<IEnumerable<Order>>> GetAll()
         {
             var baseResponse = new BaseResponse<IEnumerable<Order>>();
-            try
+            var ord = await _ordRepository.GetAll();
+            if (ord == null)
             {
-                var ord = await _ordRepository.GetAll();
-                if (ord == null)
-                {
-                    baseResponse.Description = "Найдено 0 элементов";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = ord;
+                baseResponse.Description = "Найдено 0 элементов";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Order>>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+            baseResponse.Data = ord;
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
 
 
-        public IBaseResponse<Order> Update(Order obj)
+        public async Task<IBaseResponse<Order>> Update(Order obj)
         {
             var baseResponse = new BaseResponse<Order>();
-            try
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    baseResponse.Description = "Объект не найден";
-                    baseResponse.StatusCode = StatusCode.OK;
-                    return baseResponse;
-                }
-
-
-                _ordRepository.Update(obj);
-
-                baseResponse.Data = obj;
-                baseResponse.Description = "успешно";
+                baseResponse.Description = "Объект не найден";
                 baseResponse.StatusCode = StatusCode.OK;
                 return baseResponse;
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Order>()
-                {
-                    StatusCode = StatusCode.Error,
-                    Description = ex.Message
-                };
-            }
+
+
+            await _ordRepository.Update(obj);
+
+            baseResponse.Data = obj;
+            baseResponse.Description = "успешно";
+            baseResponse.StatusCode = StatusCode.OK;
+            return baseResponse;
         }
     }
 }

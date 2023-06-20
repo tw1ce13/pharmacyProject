@@ -13,26 +13,25 @@ namespace PharmacyProject.DAL.Repositories
             _context = context;
 		}
 
-        public void Add(Delivery data)
+        public async Task Add(Delivery delivery)
         {
-            _context.Deliveries.Add(data);
+            _context.Deliveries.Add(delivery);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Delivery data)
+        public async Task Delete(Delivery delivery)
         {
-            _context.Deliveries.Remove(data);
+            _context.Deliveries.Remove(delivery);
+            await _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<Delivery>> GetAll()
-        {
-            var list = await _context.Deliveries.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<Delivery>> GetAll()=>
+            await _context.Deliveries.ToListAsync();
 
-        public async Task<Delivery> GetById(int id)
+        public async Task<Delivery> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Deliveries.FindAsync(id);
+            var obj = await _context.Deliveries.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
@@ -44,15 +43,14 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<IEnumerable<Delivery>> GetFresh()
         {
-            var list = await _context.Deliveries.ToListAsync();
-            var result = list.Where(delivery => delivery.ExpirationData >= DateTime.Now);
-            return result;
+            var list = await _context.Deliveries.Where(x=>x.ExpirationDate>=DateTime.UtcNow).ToListAsync();
+            return list;
         }
 
-        public async Task Update(Delivery data)
+        public async Task Update(Delivery delivery)
         {
-            if (data != null)
-                _context.Deliveries.Update(data);
+            if (delivery != null)
+                _context.Deliveries.Update(delivery);
             await _context.SaveChangesAsync();
         }
     }

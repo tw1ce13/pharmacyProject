@@ -12,26 +12,25 @@ namespace PharmacyProject.DAL.Repositories
 			_context = context;
 		}
 
-        public void Add(RecipeDrug data)
+        public async Task Add(RecipeDrug recipeDrug)
         {
-            _context.RecipeDrugs.Add(data);
+            _context.RecipeDrugs.Add(recipeDrug);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(RecipeDrug data)
+        public async Task Delete(RecipeDrug recipeDrug)
         {
-            _context.RecipeDrugs.Remove(data);
+            _context.RecipeDrugs.Remove(recipeDrug);
+            await _context.SaveChangesAsync();
         }
 
 
-        public async Task<IEnumerable<RecipeDrug>> GetAll()
-        {
-            var list = await _context.RecipeDrugs.ToListAsync();
-            return list;
-        }
+        public async Task<IEnumerable<RecipeDrug>> GetAll()=>
+            await _context.RecipeDrugs.ToListAsync();
 
-        public async Task<RecipeDrug> GetById(int id)
+        public async Task<RecipeDrug> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.RecipeDrugs.FindAsync(id);
+            var obj = await _context.RecipeDrugs.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
@@ -41,10 +40,10 @@ namespace PharmacyProject.DAL.Repositories
             return obj!;
         }
 
-        public async Task Update(RecipeDrug data)
+        public async Task Update(RecipeDrug recipeDrug)
         {
-            if (data != null)
-                _context.RecipeDrugs.Update(data);
+            if (recipeDrug != null)
+                _context.RecipeDrugs.Update(recipeDrug);
             await _context.SaveChangesAsync();
         }
     }
