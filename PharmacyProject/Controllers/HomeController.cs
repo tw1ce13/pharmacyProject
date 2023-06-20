@@ -41,8 +41,6 @@ public class HomeController : Controller
     
     public async Task<ActionResult> Index()
     {
-        Drug drug = new Drug();
-        _drugService.Delete(drug);
         var baseResponse = await _webService.GetAll();
         var list = baseResponse.Data;
         return View(list);
@@ -90,8 +88,7 @@ public class HomeController : Controller
     public async Task<ActionResult> AddToOrder(int itemId, int quantity, CancellationToken token)
     {
         var patients = await _patientService.GetAll();
-        var dataPatient = patients.Data.Last();
-        var userId = dataPatient.Id;
+        var userId = patients.Data.Last().Id;
         HttpContext.Session.SetInt32("UserId", userId);
         Random random = new Random();
         int? pharmacyId = HttpContext.Session.GetInt32("PharmacyId");

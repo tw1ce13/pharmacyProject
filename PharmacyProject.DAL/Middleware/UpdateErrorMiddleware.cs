@@ -33,11 +33,7 @@ namespace PharmacyProject.DAL.Middleware
         private async Task HandleUpdateErrorAsync(HttpContext context, Exception ex)
         {
             context.Response.StatusCode = (int)StatusCode.Error;
-            ErrorResponse errorResponse = new ErrorResponse
-            {
-                StatusCode = StatusCode.Error,
-                Message = ex.Message
-            };
+            var errorResponse = new ErrorResponse();
             switch (ex)
             {
                 case DbUpdateException:
@@ -69,7 +65,7 @@ namespace PharmacyProject.DAL.Middleware
                     {
                         StatusCode = StatusCode.Error,
                         Message = ex.Message,
-                        Description = "Ошибка"
+                        Description = "Error"
                     };
                     break;
             }
