@@ -21,26 +21,26 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Pharmacy> Add(Pharmacy pharmacy)
+        public async Task<IBaseResponse<Pharmacy>> Add(Pharmacy pharmacy)
         {
-            _pharmacyRepository.Add(pharmacy);
+            await _pharmacyRepository.Add(pharmacy);
             var baseResponse = new BaseResponse<Pharmacy>("Success", StatusCode.OK, pharmacy);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Pharmacy> Delete(int id)
+        public async Task<IBaseResponse<Pharmacy>> Delete(int id)
         {
             Pharmacy pharmacy = new Pharmacy() { Id = id };
-            _pharmacyRepository.Delete(pharmacy);
+            await _pharmacyRepository.Delete(pharmacy);
             var baseResponse = new BaseResponse<Pharmacy>("Success", StatusCode.OK, pharmacy);
             return baseResponse;
         }
 
-        public IBaseResponse<Pharmacy> Delete(Pharmacy pharmacy)
+        public async Task<IBaseResponse<Pharmacy>> Delete(Pharmacy pharmacy)
         {
-            _pharmacyRepository.Delete(pharmacy);
+            await _pharmacyRepository.Delete(pharmacy);
             var baseResponse = new BaseResponse<Pharmacy>("Success", StatusCode.OK, pharmacy);
             return baseResponse;
         }
@@ -76,7 +76,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Pharmacy> Update(Pharmacy obj)
+        public async Task<IBaseResponse<Pharmacy>> Update(Pharmacy obj)
         {
             var baseResponse = new BaseResponse<Pharmacy>();
             if (obj == null)
@@ -86,7 +86,7 @@ namespace PharmacyProject.Services.Implementations
                 return baseResponse;
             }
 
-            _pharmacyRepository.Update(obj);
+            await _pharmacyRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

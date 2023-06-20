@@ -21,9 +21,9 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Class> Add(Class @class)
+        public async Task<IBaseResponse<Class>> Add(Class @class)
         {
-            _classRepository.Add(@class);
+            await _classRepository.Add(@class);
             var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
 
             return baseResponse;
@@ -31,21 +31,21 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Class> Delete(int id)
+        public async Task<IBaseResponse<Class>> Delete(int id)
         {
             Class obj = new Class()
             {
                 ClassId = id
             };
-            _classRepository.Delete(obj);
+            await _classRepository.Delete(obj);
             var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
 
             return baseResponse;
         }
 
-        public IBaseResponse<Class> Delete(Class @class)
+        public async Task<IBaseResponse<Class>> Delete(Class @class)
         {
-            _classRepository.Delete(@class);
+            await _classRepository.Delete(@class);
             var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
 
             return baseResponse;
@@ -82,7 +82,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Class> Update(Class @class)
+        public async Task<IBaseResponse<Class>> Update(Class @class)
         {
             var baseResponse = new BaseResponse<Class>();
             if (@class == null)
@@ -94,7 +94,7 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-            _classRepository.Update(@class);
+            await _classRepository.Update(@class);
 
             baseResponse.Data = @class;
             baseResponse.Description = "успешно";

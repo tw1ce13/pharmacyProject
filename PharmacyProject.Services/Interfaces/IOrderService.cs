@@ -8,11 +8,11 @@ namespace PharmacyProject.Services.Interfaces
 	{
         Task<IBaseResponse<IEnumerable<Order>>> GetAll();
         Task<IBaseResponse<Order>> Get(int id, CancellationToken token);
-        IBaseResponse<Order> Delete(int id);
-        IBaseResponse<Order> Delete(Order obj);
+        Task<IBaseResponse<Order>> Delete(int id);
+        Task<IBaseResponse<Order>> Delete(Order obj);
         IBaseResponse<Order> DeleteRange(IEnumerable<Order> orders);
-        IBaseResponse<Order> Add(Order obj);
-        IBaseResponse<Order> Update(Order obj);
+        Task<IBaseResponse<Order>> Add(Order obj);
+        Task<IBaseResponse<Order>> Update(Order obj);
     }
 }
 

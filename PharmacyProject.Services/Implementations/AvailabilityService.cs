@@ -21,25 +21,25 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Availability> Add(Availability availability)
+        public async Task<IBaseResponse<Availability>> Add(Availability availability)
         {
-            _availabilityRepository.Add(availability);
+            await _availabilityRepository.Add(availability);
             var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
             return baseResponse;
         }
 
-        public IBaseResponse<Availability> Delete(int id)
+        public async Task<IBaseResponse<Availability>> Delete(int id)
         {
 
             Availability availability = new Availability() { Id = id };
-            _availabilityRepository.Delete(availability);
+            await _availabilityRepository.Delete(availability);
             var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
             return baseResponse;
         }
 
-        public IBaseResponse<Availability> Delete(Availability availability)
+        public async Task<IBaseResponse<Availability>> Delete(Availability availability)
         {
-            _availabilityRepository.Delete(availability);
+            await _availabilityRepository.Delete(availability);
             var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
 
             return baseResponse;
@@ -108,7 +108,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Availability> Update(Availability obj)
+        public async Task<IBaseResponse<Availability>> Update(Availability obj)
         {
             var baseResponse = new BaseResponse<Availability>();
             if (obj == null)
@@ -118,7 +118,7 @@ namespace PharmacyProject.Services.Implementations
                 return baseResponse;
             }
 
-            _availabilityRepository.Update(obj);
+            await _availabilityRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

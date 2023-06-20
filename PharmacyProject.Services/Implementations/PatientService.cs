@@ -21,26 +21,26 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Patient> Add(Patient patient)
+        public async Task<IBaseResponse<Patient>> Add(Patient patient)
         {
-            _patientRepository.Add(patient);
+            await _patientRepository.Add(patient);
             var baseResponse = new BaseResponse<Patient>("Success", StatusCode.OK, patient);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Patient> Delete(int id)
+        public async Task<IBaseResponse<Patient>> Delete(int id)
         {
             Patient patient = new Patient() { Id = id };
-            _patientRepository.Delete(patient);
+            await _patientRepository.Delete(patient);
             var baseResponse = new BaseResponse<Patient>("Success", StatusCode.OK, patient);
             return baseResponse;
         }
 
-        public IBaseResponse<Patient> Delete(Patient patient)
+        public async Task<IBaseResponse<Patient>> Delete(Patient patient)
         {
-            _patientRepository.Delete(patient);
+            await _patientRepository.Delete(patient);
             var baseResponse = new BaseResponse<Patient>("Success", StatusCode.OK, patient);
             return baseResponse;
         }
@@ -76,7 +76,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Patient> Update(Patient obj)
+        public async Task<IBaseResponse<Patient>> Update(Patient obj)
         {
             var baseResponse = new BaseResponse<Patient>();
             if (obj == null)
@@ -86,7 +86,7 @@ namespace PharmacyProject.Services.Implementations
                 return baseResponse;
             }
 
-            _patientRepository.Update(obj);
+            await _patientRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

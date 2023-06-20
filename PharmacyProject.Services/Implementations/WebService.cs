@@ -21,9 +21,9 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Web> Add(Web web)
+        public async Task<IBaseResponse<Web>> Add(Web web)
         {
-            _webRepository.Add(web);
+            await _webRepository.Add(web);
             var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
 
             return baseResponse;
@@ -31,18 +31,18 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Web> Delete(int id)
+        public async Task<IBaseResponse<Web>> Delete(int id)
         {
             Web web = new Web() { Id = id };
-            _webRepository.Delete(web);
+            await _webRepository.Delete(web);
             var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
 
             return baseResponse;
         }
 
-        public IBaseResponse<Web> Delete(Web web)
+        public async Task<IBaseResponse<Web>> Delete(Web web)
         {
-            _webRepository.Delete(web);
+            await _webRepository.Delete(web);
             var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
 
             return baseResponse;
@@ -81,7 +81,7 @@ namespace PharmacyProject.Services.Implementations
 
     }
 
-        public IBaseResponse<Web> Update(Web obj)
+        public async Task<IBaseResponse<Web>> Update(Web obj)
         {
             var baseResponse = new BaseResponse<Web>();
             if (obj == null)
@@ -92,7 +92,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _webRepository.Update(obj);
+            await _webRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

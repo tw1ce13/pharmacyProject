@@ -12,16 +12,16 @@ namespace PharmacyProject.DAL.Repositories
             _context = context;
 		}
 
-        public void Add(OrdDrug ordDrug)
+        public async Task Add(OrdDrug ordDrug)
         {
             _context.OrdersDrugs.Add(ordDrug);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(OrdDrug ordDrug)
+        public async Task Delete(OrdDrug ordDrug)
         {
             _context.OrdersDrugs.Remove(ordDrug);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<OrdDrug>> GetAll()=>

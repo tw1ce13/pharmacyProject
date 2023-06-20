@@ -20,26 +20,26 @@ namespace PharmacyProject.Services.Implementations
         }
 
 
-        public IBaseResponse<Employee> Add(Employee employee)
+        public async Task<IBaseResponse<Employee>> Add(Employee employee)
         {
-            _employeeRepository.Add(employee);
+            await _employeeRepository.Add(employee);
             var baseResponse = new BaseResponse<Employee>("Success", StatusCode.OK, employee);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Employee> Delete(int id)
+        public async Task<IBaseResponse<Employee>> Delete(int id)
         {
             Employee employee = new Employee() { Id = id };
-            _employeeRepository.Delete(employee);
+            await _employeeRepository.Delete(employee);
             var baseResponse = new BaseResponse<Employee>("Success", StatusCode.OK, employee);
             return baseResponse;
         }
 
-        public IBaseResponse<Employee> Delete(Employee employee)
+        public async Task<IBaseResponse<Employee>> Delete(Employee employee)
         {
-            _employeeRepository.Delete(employee);
+            await _employeeRepository.Delete(employee);
             var baseResponse = new BaseResponse<Employee>("Success", StatusCode.OK, employee);
             return baseResponse;
         }
@@ -75,7 +75,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Employee> Update(Employee obj)
+        public async Task<IBaseResponse<Employee>> Update(Employee obj)
         {
             var baseResponse = new BaseResponse<Employee>();
             if (obj == null)
@@ -86,7 +86,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _employeeRepository.Update(obj);
+            await _employeeRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

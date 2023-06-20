@@ -21,9 +21,9 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Recipe> Add(Recipe recipe)
+        public async Task<IBaseResponse<Recipe>> Add(Recipe recipe)
         {
-            _recipeRepository.Add(recipe);
+            await _recipeRepository.Add(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 
             return baseResponse;
@@ -31,18 +31,18 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Recipe> Delete(int id)
+        public async Task<IBaseResponse<Recipe>> Delete(int id)
         {
             Recipe recipe = new Recipe() { Id = id };
-            _recipeRepository.Delete(recipe);
+            await _recipeRepository.Delete(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 
             return baseResponse;
         }
 
-        public IBaseResponse<Recipe> Delete(Recipe recipe)
+        public async Task<IBaseResponse<Recipe>> Delete(Recipe recipe)
         {
-            _recipeRepository.Delete(recipe);
+            await _recipeRepository.Delete(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 
             return baseResponse;
@@ -79,7 +79,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Recipe> Update(Recipe obj)
+        public async Task<IBaseResponse<Recipe>> Update(Recipe obj)
         {
             var baseResponse = new BaseResponse<Recipe>();
             if (obj == null)
@@ -90,7 +90,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _recipeRepository.Update(obj);
+            await _recipeRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

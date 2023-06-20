@@ -22,26 +22,26 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Drug> Add(Drug drug)
+        public async Task<IBaseResponse<Drug>> Add(Drug drug)
         {
-            _drugRepository.Add(drug);
+            await _drugRepository.Add(drug);
             var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Drug> Delete(int id)
+        public async Task<IBaseResponse<Drug>> Delete(int id)
         {
             Drug drug = new Drug() { Id = id };
-            _drugRepository.Delete(drug);
+            await _drugRepository.Delete(drug);
             var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
             return baseResponse;
         }
 
-        public IBaseResponse<Drug> Delete(Drug drug)
+        public async Task<IBaseResponse<Drug>> Delete(Drug drug)
         {
-            _drugRepository.Delete(drug);
+            await _drugRepository.Delete(drug);
             var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
             return baseResponse;
         }
@@ -130,7 +130,7 @@ namespace PharmacyProject.Services.Implementations
 
         }
 
-        public IBaseResponse<Drug> Update(Drug obj)
+        public async Task<IBaseResponse<Drug>> Update(Drug obj)
         {
             var baseResponse = new BaseResponse<Drug>();
             if (obj == null)
@@ -141,7 +141,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _drugRepository.Update(obj);
+            await _drugRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

@@ -15,17 +15,17 @@ namespace PharmacyProject.DAL.Repositories
 		}
 
 
-        public void Add(Drug drug)
+        public async Task Add(Drug drug)
         {
             _context.Drugs.Add(drug);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
 
-        public void Delete(Drug drug)
+        public async Task Delete(Drug drug)
         {
             _context.Drugs.Remove(drug);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
 
@@ -35,7 +35,7 @@ namespace PharmacyProject.DAL.Repositories
 
         public async Task<Drug> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Drugs.FindAsync(id, token);
+            var obj = await _context.Drugs.FirstOrDefaultAsync(x=>x.Id == id, token);
             return obj!;
         }
 

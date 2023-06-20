@@ -21,26 +21,26 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<RecipeDrug> Add(RecipeDrug recipeDrug)
+        public async Task<IBaseResponse<RecipeDrug>> Add(RecipeDrug recipeDrug)
         {
-            _recipeDrugRepository.Add(recipeDrug);
+            await _recipeDrugRepository.Add(recipeDrug);
             var baseResponse = new BaseResponse<RecipeDrug>("Success", StatusCode.OK, recipeDrug);
             return baseResponse;
         }
 
 
-        public IBaseResponse<RecipeDrug> Delete(int id)
+        public async Task<IBaseResponse<RecipeDrug>> Delete(int id)
         {
             RecipeDrug recipeDrug = new RecipeDrug() { Id = id };
-            _recipeDrugRepository.Delete(recipeDrug);
+            await _recipeDrugRepository.Delete(recipeDrug);
             var baseResponse = new BaseResponse<RecipeDrug>("Success", StatusCode.OK, recipeDrug);
 
             return baseResponse;
         }
 
-        public IBaseResponse<RecipeDrug> Delete(RecipeDrug recipeDrug)
+        public async Task<IBaseResponse<RecipeDrug>> Delete(RecipeDrug recipeDrug)
         {
-            _recipeDrugRepository.Delete(recipeDrug);
+            await _recipeDrugRepository.Delete(recipeDrug);
             var baseResponse = new BaseResponse<RecipeDrug>("Success", StatusCode.OK, recipeDrug);
 
             return baseResponse;
@@ -77,7 +77,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<RecipeDrug> Update(RecipeDrug obj)
+        public async Task<IBaseResponse<RecipeDrug>> Update(RecipeDrug obj)
         {
             var baseResponse = new BaseResponse<RecipeDrug>();
             if (obj == null)
@@ -88,7 +88,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _recipeDrugRepository.Update(obj);
+            await _recipeDrugRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

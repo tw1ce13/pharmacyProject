@@ -20,26 +20,26 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Discount> Add(Discount discount)
+        public async Task<IBaseResponse<Discount>> Add(Discount discount)
         {
-            _discountRepository.Add(discount);
+            await _discountRepository.Add(discount);
             var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Discount> Delete(int id)
+        public async Task<IBaseResponse<Discount>> Delete(int id)
         {
             Discount discount = new Discount() { Id = id };
-            _discountRepository.Delete(discount);
+            await _discountRepository.Delete(discount);
             var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
             return baseResponse;
         }
 
-        public IBaseResponse<Discount> Delete(Discount discount)
+        public async Task<IBaseResponse<Discount>> Delete(Discount discount)
         {
-            _discountRepository.Delete(discount);
+            await _discountRepository.Delete(discount);
             var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
             return baseResponse;
         }
@@ -76,7 +76,7 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public IBaseResponse<Discount> Update(Discount obj)
+        public async Task<IBaseResponse<Discount>> Update(Discount obj)
         {
             var baseResponse = new BaseResponse<Discount>();
             if (obj == null)
@@ -87,7 +87,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _discountRepository.Update(obj);
+            await _discountRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";

@@ -110,7 +110,7 @@ public class HomeController : Controller
                 PatientId = userId,
                 EmployeeId = employeeId
             };
-            _orderService.Add(order);
+            await _orderService.Add(order);
 
             var drug = await _drugService.Get(itemId, token);
             var orders = await _orderService.GetAll();
@@ -125,7 +125,7 @@ public class HomeController : Controller
                 Count = quantity,
                 Price = quantity * drug.Data.Cost
             };
-            _ordDrugService.Add(ordDrug);
+            await _ordDrugService.Add(ordDrug);
             return RedirectToAction("GetDrugs", "Home", new { selectedOption2 = pharmacyId });
         }
         return RedirectToAction("Register", "Home");

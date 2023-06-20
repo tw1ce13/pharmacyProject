@@ -22,19 +22,19 @@ namespace PharmacyProject.Services.Implementations
 
 
 
-        public IBaseResponse<Order> Add(Order ord)
+        public async Task<IBaseResponse<Order>> Add(Order ord)
         {
-            _ordRepository.Add(ord);
+            await _ordRepository.Add(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
         }
 
 
 
-        public IBaseResponse<Order> Delete(int id)
+        public async Task<IBaseResponse<Order>> Delete(int id)
         {
             Order ord = new Order() { Id = id };
-            _ordRepository.Delete(ord);
+            await _ordRepository.Delete(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
         }
@@ -47,9 +47,9 @@ namespace PharmacyProject.Services.Implementations
         }
 
 
-        public IBaseResponse<Order> Delete(Order ord)
+        public async Task<IBaseResponse<Order>> Delete(Order ord)
         {
-            _ordRepository.Delete(ord);
+            await _ordRepository.Delete(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
         }
@@ -86,7 +86,7 @@ namespace PharmacyProject.Services.Implementations
         }
 
 
-        public IBaseResponse<Order> Update(Order obj)
+        public async Task<IBaseResponse<Order>> Update(Order obj)
         {
             var baseResponse = new BaseResponse<Order>();
             if (obj == null)
@@ -97,7 +97,7 @@ namespace PharmacyProject.Services.Implementations
             }
 
 
-            _ordRepository.Update(obj);
+            await _ordRepository.Update(obj);
 
             baseResponse.Data = obj;
             baseResponse.Description = "успешно";
