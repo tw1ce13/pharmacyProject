@@ -45,7 +45,7 @@ namespace PharmacyProject.DAL.Middleware
                     {
                         StatusCode = StatusCode.Error,
                         Message = ex.Message,
-                        Description = "Ошибка обновления"
+                        Description = "Update Error"
                     };
                     break;
                 case NullReferenceException:
@@ -53,7 +53,15 @@ namespace PharmacyProject.DAL.Middleware
                     {
                         StatusCode = StatusCode.Error,
                         Message = ex.Message,
-                        Description = "Ссылка на объект не указывает на экземпляр объекта"
+                        Description = "There is no such object"
+                    };
+                    break;
+                case InvalidOperationException:
+                    errorResponse = new ErrorResponse
+                    {
+                        StatusCode = StatusCode.Error,
+                        Message = ex.Message,
+                        Description = "Invalid operation"
                     };
                     break;
                 default:

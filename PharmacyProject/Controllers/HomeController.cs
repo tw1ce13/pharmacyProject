@@ -41,6 +41,8 @@ public class HomeController : Controller
     
     public async Task<ActionResult> Index()
     {
+        Drug drug = new Drug();
+        _drugService.Delete(drug);
         var baseResponse = await _webService.GetAll();
         var list = baseResponse.Data;
         return View(list);
@@ -95,7 +97,7 @@ public class HomeController : Controller
         int? pharmacyId = HttpContext.Session.GetInt32("PharmacyId");
         int employeeId = random.Next(7, 186);
         var date = DateTime.UtcNow;
-        /*временное заполнени*/
+        /*временное заполнение*/
         if (pharmacyId.HasValue)
         {
             Order order = new Order()
