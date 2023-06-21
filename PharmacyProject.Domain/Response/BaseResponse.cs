@@ -7,7 +7,6 @@ namespace PharmacyProject.Domain.Response
     {
         public BaseResponse()
         {
-
         }
         public BaseResponse(string description, StatusCode statusCode, T data)
         {
@@ -16,7 +15,7 @@ namespace PharmacyProject.Domain.Response
             Data = data;
         }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public StatusCode StatusCode { get; set; }
         public T Data { get; set; }
         
