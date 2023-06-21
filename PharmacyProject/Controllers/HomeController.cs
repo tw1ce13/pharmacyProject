@@ -8,6 +8,7 @@ using PharmacyProject.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Net.Http.Headers;
 
 namespace PharmacyProject.Controllers;
 public class HomeController : Controller
@@ -76,7 +77,7 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public async Task<ActionResult> ShowDiscounts()
     {
         var discounts = await _discountService.GetAll();
@@ -128,7 +129,6 @@ public class HomeController : Controller
 
     public async Task<ActionResult> ShowItemsInOrder(CancellationToken cancellationToken)
     {
-        
         int? userId = HttpContext.Session.GetInt32("UserId");
         var baseResponseDrug = await _drugService.GetAll(cancellationToken);
         var baseRespnseOrd = await _orderService.GetAll();
@@ -155,7 +155,7 @@ public class HomeController : Controller
                     audience: AuthOptions.audience,
                     notBefore: now,
                     claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.lifetime)),
+                    expires: DateTime.UtcNow.AddHours(1),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
