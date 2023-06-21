@@ -9,9 +9,9 @@ namespace PharmacyProject.Domain.Response
 		{
 		}
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public StatusCode StatusCode { get; set; }
-        public string Message { get; set; }
+        public string? Message { get; set; }
     }
 }
 
