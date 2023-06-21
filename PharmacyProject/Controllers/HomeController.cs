@@ -149,7 +149,6 @@ public class HomeController : Controller
             return BadRequest(new { errorText = "Invalid username or password." });
 
         var now = DateTime.UtcNow;
-        var credentials = new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
         var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.issure,
                     audience: AuthOptions.audience,
