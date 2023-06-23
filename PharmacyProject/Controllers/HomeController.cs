@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using PharmacyProject.DAL;
 using PharmacyProject.Domain.Models;
 using PharmacyProject.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using PharmacyProject.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Net.Http.Headers;
 
 namespace PharmacyProject.Controllers;
 public class HomeController : Controller

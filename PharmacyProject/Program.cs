@@ -10,8 +10,6 @@ using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Models;
 using PharmacyProject.DAL.Middleware;
 using Serilog;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
