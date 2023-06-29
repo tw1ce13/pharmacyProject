@@ -25,6 +25,7 @@ public class DrugsController : Controller
         _patientService = patientService;
 	}
 
+
     public async Task<ActionResult> GetDrugs(int pharmacyId, CancellationToken cancellationToken)
     {
         HttpContext.Session.SetInt32("PharmacyId", pharmacyId);
@@ -42,6 +43,7 @@ public class DrugsController : Controller
 
         return View(drugs.Data);
     }
+
 
     [HttpPost]
     public async Task<ActionResult> AddToOrder(int itemId, int quantity, CancellationToken token)
@@ -84,6 +86,7 @@ public class DrugsController : Controller
         }
         return RedirectToAction("Register", "Auth");
     }
+
 
     public async Task<ActionResult> ShowItemsInOrder(CancellationToken cancellationToken)
     {

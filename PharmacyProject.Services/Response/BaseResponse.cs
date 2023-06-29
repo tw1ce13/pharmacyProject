@@ -1,5 +1,4 @@
-﻿using System;
-using PharmacyProject.Domain.Enum;
+﻿using PharmacyProject.Domain.Enum;
 
 namespace PharmacyProject.Services.Response;
 

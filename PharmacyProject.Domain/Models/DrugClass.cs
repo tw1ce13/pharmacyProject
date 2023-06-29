@@ -1,6 +1,4 @@
-﻿
-namespace PharmacyProject.Domain.Models;
-
+﻿namespace PharmacyProject.Domain.Models;
 public class DrugClass
 {
 	public int Id { get; set; }

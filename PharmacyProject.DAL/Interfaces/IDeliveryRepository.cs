@@ -1,11 +1,9 @@
-﻿using System;
-using PharmacyProject.Domain.Models;
+﻿using PharmacyProject.Domain.Models;
 
-namespace PharmacyProject.DAL.Interfaces
+namespace PharmacyProject.DAL.Interfaces;
+
+public interface IDeliveryRepository : IBaseRepository<Delivery>
 {
-	public interface IDeliveryRepository : IBaseRepository<Delivery>
-	{
-		Task<IEnumerable<Delivery>> GetFresh();
-	}
+	Task<IEnumerable<Delivery>> GetFresh();
 }
 

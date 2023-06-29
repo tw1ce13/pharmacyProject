@@ -1,5 +1,4 @@
-﻿
-namespace PharmacyProject.Domain.Models;
+﻿namespace PharmacyProject.Domain.Models;
 
 public class Discount
 {

@@ -1,8 +1,6 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacyProject.Domain.Models;
-
 public class OrdDrug
 {
 	public int Id { get; set; }

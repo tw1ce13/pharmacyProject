@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Microsoft.AspNetCore.Http;
 using PharmacyProject.Domain.Enum;

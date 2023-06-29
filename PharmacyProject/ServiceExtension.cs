@@ -25,7 +25,6 @@ public static class ServicesExtensions
         services.AddScoped<IRecipeService, RecipeService>();
         services.AddScoped<IWebService, WebService>();
 
-
         services.AddTransient<IAvailabilityRepository, AvailabilityRepository>();
         services.AddTransient<IBaseRepository<DrugClass>, DrugClassRepository>();
         services.AddTransient<IBaseRepository<Discount>, DiscountRepository>();

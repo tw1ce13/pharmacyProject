@@ -1,13 +1,7 @@
 ﻿using PharmacyProject.DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using PharmacyProject.Domain;
 using Microsoft.EntityFrameworkCore;
-using PharmacyProject.DAL.Repositories;
-using PharmacyProject.Services.Implementations;
-using PharmacyProject.Services.Interfaces;
-using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.Domain.Models;
 using PharmacyProject.Services.Middleware;
 using PharmacyProject;
 using Serilog;
@@ -59,30 +53,18 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
-
-
 builder.Services.AddDbContext<PharmacyContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddMyLibraryServices();
 
-
-
-
-
 var app = builder.Build();
-
-
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 app.UseMiddleware<UpdateErrorMiddleware>();
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();

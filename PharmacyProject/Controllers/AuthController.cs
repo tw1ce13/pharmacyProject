@@ -1,10 +1,7 @@
 ﻿using PharmacyProject.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using PharmacyProject.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using PharmacyProject.Domain;
-using PharmacyProject.Services.Implementations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -20,10 +17,12 @@ public class AuthController : Controller
         _discountService = discountService;
 	}
 
+
     public ActionResult Register()
     {
         return View();
     }
+
 
     [HttpGet]
     [Authorize]
@@ -32,6 +31,7 @@ public class AuthController : Controller
         var discounts = await _discountService.GetAll();
         return View(discounts.Data);
     }
+
 
     [HttpPost]
     public async Task<IActionResult> GenerateToken(string email, string password)

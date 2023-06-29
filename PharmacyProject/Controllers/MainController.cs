@@ -1,12 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using PharmacyProject.Domain.Models;
 using PharmacyProject.Services.Interfaces;
-using Microsoft.IdentityModel.Tokens;
-using PharmacyProject.Domain;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
 namespace PharmacyProject.Controllers;
 
 public class MainController : Controller
@@ -19,13 +12,15 @@ public class MainController : Controller
         _pharmacyService = pharmacyService;
         _webService = webService;
     }
-    
+
+
     public async Task<ActionResult> Index()
     {
         var baseResponse = await _webService.GetAll();
         var list = baseResponse.Data;
         return View(list);
     }
+
 
     [HttpGet]
     public async Task<ActionResult> GetPharmacyAddresses(int webId)

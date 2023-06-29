@@ -1,5 +1,4 @@
-﻿using System;
-using PharmacyProject.Domain.Models;
+﻿using PharmacyProject.Domain.Models;
 using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Interfaces;
