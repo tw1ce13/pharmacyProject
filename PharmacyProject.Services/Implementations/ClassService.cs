@@ -1,106 +1,114 @@
-﻿using System;
+﻿using System.Security.Claims;
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
-namespace PharmacyProject.Services.Implementations
+namespace PharmacyProject.Services.Implementations;
+
+public class ClassService : IClassService
 {
-    public class ClassService : IClassService
+    private readonly IBaseRepository<DrugClass> _classRepository;
+    public ClassService(IBaseRepository<DrugClass> classRepository)
     {
-        private readonly IBaseRepository<Class> _classRepository;
+        _classRepository = classRepository;
+    }
 
 
-
-        public ClassService(IBaseRepository<Class> classRepository)
+    public async Task<IBaseResponse<DrugClass>> Add(DrugClass drugClass)
+    {
+        await _classRepository.Add(drugClass);
+        var baseResponse = new BaseResponse<DrugClass>
         {
-            _classRepository = classRepository;
-        }
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = drugClass
+        };
+
+        return baseResponse;
+    }
 
 
-
-        public async Task<IBaseResponse<Class>> Add(Class @class)
+    public async Task<IBaseResponse<DrugClass>> Delete(int id, CancellationToken token)
+    {
+        var drugClasses = await _classRepository.GetById(id, token);
+        await _classRepository.Delete(drugClasses);
+        var baseResponse = new BaseResponse<DrugClass>
         {
-            await _classRepository.Add(@class);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = drugClasses
+        };
 
+        return baseResponse;
+    }
+
+
+    public async Task<IBaseResponse<DrugClass>> Delete(DrugClass drugClass)
+    {
+        await _classRepository.Delete(drugClass);
+        var baseResponse = new BaseResponse<DrugClass>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = drugClass
+        };
+
+        return baseResponse;
+    }
+
+
+    public async Task<IBaseResponse<DrugClass>> Get(int id, CancellationToken token)
+    {
+        var baseResponse = new BaseResponse<DrugClass>();
+        var drugClass = await _classRepository.GetById(id, token);
+        if (drugClass == null)
+        {
+            baseResponse.Description = "Не найдено";
+            baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
+        baseResponse.Data = drugClass;
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
+    }
 
 
-
-        public async Task<IBaseResponse<Class>> Delete(int id)
+    public async Task<IBaseResponse<IEnumerable<DrugClass>>> GetAll()
+    {
+        var baseResponse = new BaseResponse<IEnumerable<DrugClass>>();
+        var drugClasses = await _classRepository.GetAll();
+        if (drugClasses == null)
         {
-            Class obj = new Class()
-            {
-                ClassId = id
-            };
-            await _classRepository.Delete(obj);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
-
+            baseResponse.Description = "Найдено 0 элементов";
+            baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
+        baseResponse.Data = drugClasses;
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
+    }
 
-        public async Task<IBaseResponse<Class>> Delete(Class @class)
+
+    public async Task<IBaseResponse<DrugClass>> Update(DrugClass drugClass)
+    {
+        var baseResponse = new BaseResponse<DrugClass>();
+        if (drugClass == null)
         {
-            await _classRepository.Delete(@class);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
-
-            return baseResponse;
-        }
-
-        public async Task<IBaseResponse<Class>> Get(int id, CancellationToken token)
-        {
-            var baseResponse = new BaseResponse<Class>();
-            var obj = await _classRepository.GetById(id, token);
-            if (obj == null)
-            {
-                baseResponse.Description = "Не найдено";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            baseResponse.Data = obj;
+            baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
 
 
-        public async Task<IBaseResponse<IEnumerable<Class>>> GetAll()
-        {
-            var baseResponse = new BaseResponse<IEnumerable<Class>>();
-            var obj = await _classRepository.GetAll();
-            if (obj == null)
-            {
-                baseResponse.Description = "Найдено 0 элементов";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            baseResponse.Data = obj;
-            baseResponse.StatusCode = StatusCode.OK;
-            return baseResponse;
-        }
 
-        public async Task<IBaseResponse<Class>> Update(Class @class)
-        {
-            var baseResponse = new BaseResponse<Class>();
-            if (@class == null)
-            {
-                baseResponse.Description = "Объект не найден";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
+        await _classRepository.Update(drugClass);
 
-
-
-            await _classRepository.Update(@class);
-
-            baseResponse.Data = @class;
-            baseResponse.Description = "успешно";
-            baseResponse.StatusCode = StatusCode.OK;
-            return baseResponse;
-        }
+        baseResponse.Data = drugClass;
+        baseResponse.Description = "Успешно";
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
     }
 }
 

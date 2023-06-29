@@ -1,102 +1,112 @@
-﻿using System;
-using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
+﻿using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
-namespace PharmacyProject.Services.Implementations
+namespace PharmacyProject.Services.Implementations;
+
+public class RecipeService : IRecipeService
 {
-    public class RecipeService : IRecipeService
+    private readonly IBaseRepository<Recipe> _recipeRepository;
+    public RecipeService(IBaseRepository<Recipe> recipeRepository)
     {
-        private readonly IBaseRepository<Recipe> _recipeRepository;
+        _recipeRepository = recipeRepository;
+    }
 
 
-
-        public RecipeService(IBaseRepository<Recipe> recipeRepository)
+    public async Task<IBaseResponse<Recipe>> Add(Recipe recipe)
+    {
+        await _recipeRepository.Add(recipe);
+        var baseResponse = new BaseResponse<Recipe>
         {
-            _recipeRepository = recipeRepository;
-        }
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = recipe
+        };
+
+        return baseResponse;
+    }
 
 
-
-        public async Task<IBaseResponse<Recipe>> Add(Recipe recipe)
+    public async Task<IBaseResponse<Recipe>> Delete(int id, CancellationToken token)
+    {
+        var recipe = await _recipeRepository.GetById(id, token);
+        await _recipeRepository.Delete(recipe);
+        var baseResponse = new BaseResponse<Recipe>
         {
-            await _recipeRepository.Add(recipe);
-            var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = recipe
+        };
 
+        return baseResponse;
+    }
+
+
+    public async Task<IBaseResponse<Recipe>> Delete(Recipe recipe)
+    {
+        await _recipeRepository.Delete(recipe);
+        var baseResponse = new BaseResponse<Recipe>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = recipe
+        };
+
+        return baseResponse;
+    }
+
+
+    public async Task<IBaseResponse<Recipe>> Get(int id, CancellationToken token)
+    {
+        var baseResponse = new BaseResponse<Recipe>();
+        var recipe = await _recipeRepository.GetById(id, token);
+        if (recipe == null)
+        {
+            baseResponse.Description = "Не найдено";
+            baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
+        baseResponse.Data = recipe;
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
+    }
 
 
-
-        public async Task<IBaseResponse<Recipe>> Delete(int id)
+    public async Task<IBaseResponse<IEnumerable<Recipe>>> GetAll()
+    {
+        var baseResponse = new BaseResponse<IEnumerable<Recipe>>();
+        var recipes = await _recipeRepository.GetAll();
+        if (recipes == null)
         {
-            Recipe recipe = new Recipe() { Id = id };
-            await _recipeRepository.Delete(recipe);
-            var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
-
+            baseResponse.Description = "Найдено 0 элементов";
+            baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
+        baseResponse.Data = recipes;
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
+    }
 
-        public async Task<IBaseResponse<Recipe>> Delete(Recipe recipe)
+
+    public async Task<IBaseResponse<Recipe>> Update(Recipe recipe)
+    {
+        var baseResponse = new BaseResponse<Recipe>();
+        if (recipe == null)
         {
-            await _recipeRepository.Delete(recipe);
-            var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
-
-            return baseResponse;
-        }
-
-        public async Task<IBaseResponse<Recipe>> Get(int id, CancellationToken token)
-        {
-            var baseResponse = new BaseResponse<Recipe>();
-            var recipe = await _recipeRepository.GetById(id, token);
-            if (recipe == null)
-            {
-                baseResponse.Description = "Не найдено";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            baseResponse.Data = recipe;
+            baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
 
 
-        public async Task<IBaseResponse<IEnumerable<Recipe>>> GetAll()
-        {
-            var baseResponse = new BaseResponse<IEnumerable<Recipe>>();
-            var recipe = await _recipeRepository.GetAll();
-            if (recipe == null)
-            {
-                baseResponse.Description = "Найдено 0 элементов";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            baseResponse.Data = recipe;
-            baseResponse.StatusCode = StatusCode.OK;
-            return baseResponse;
-        }
+        await _recipeRepository.Update(recipe);
 
-        public async Task<IBaseResponse<Recipe>> Update(Recipe obj)
-        {
-            var baseResponse = new BaseResponse<Recipe>();
-            if (obj == null)
-            {
-                baseResponse.Description = "Объект не найден";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-
-
-            await _recipeRepository.Update(obj);
-
-            baseResponse.Data = obj;
-            baseResponse.Description = "успешно";
-            baseResponse.StatusCode = StatusCode.OK;
-            return baseResponse;
-        }
+        baseResponse.Data = recipe;
+        baseResponse.Description = "Успешно";
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
     }
 }
 

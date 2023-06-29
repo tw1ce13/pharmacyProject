@@ -12,15 +12,15 @@
 <body>
     <header>
         <div class="logo">
-            <a href="@Url.Action("Index", "Home")">Работа с БД</a>
+            <a href="@Url.Action("Index", "Main")">Работа с БД</a>
         </div>
         <nav>
             <ul>
-                <li><a href="@Url.Action("ShowDiscounts", "Home")">Акции и скидки</a></li>
+                <li><a href="@Url.Action("ShowDiscounts", "Auth")">Акции и скидки</a></li>
             </ul>
         </nav>
-            <a href="@Url.Action("Register", "Home")" class="register-btn">Зарегистрироваться</a>
-            <a href="@Url.Action("ShowItemsInOrder", "Home")" class="register-btn">Заказ</a>
+            <a href="@Url.Action("Register", "Auth")" class="register-btn">Зарегистрироваться</a>
+            <a href="@Url.Action("ShowItemsInOrder", "Drugs")" class="register-btn">Заказ</a>
     </header>
     @RenderBody()
 </body>

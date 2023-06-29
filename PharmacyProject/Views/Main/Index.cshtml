@@ -9,7 +9,7 @@
     <h1>Добро пожаловать в магазин всех лекарств</h1>
 </div>
 <br>
-<form id="pharmacyForm" method="POST" action="@Url.Action("GetDrugs", "Home")">
+<form id="pharmacyForm" method="POST" action="@Url.Action("GetDrugs", "Drugs")">
     <div id="pharmaciesContainer">
         <select id="selectBox" name="selectedOption">
             <option>Выбрать сеть аптеки</option>
@@ -36,7 +36,7 @@
                 var selectedWebId = $(this).val();
                 $.ajax({
                     type: "GET",
-                    url: "/Home/GetPharmacyAddresses",
+                    url: "/Main/GetPharmacyAddresses",
                     data: { webId: selectedWebId },
                     success: function (result) {
                         $("#selectBox2").html(result);

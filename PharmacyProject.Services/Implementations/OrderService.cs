@@ -1,109 +1,122 @@
-﻿using System;
-using PharmacyProject.Domain.Enum;
-using PharmacyProject.Domain.Response;
+﻿using PharmacyProject.Domain.Enum;
 using PharmacyProject.Services.Interfaces;
-using System.Security.Cryptography;
 using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.DAL.Repositories;
+using PharmacyProject.Services.Response;
 
-namespace PharmacyProject.Services.Implementations
+namespace PharmacyProject.Services.Implementations;
+
+public class OrderService : IOrderService
 {
-    public class OrderService : IOrderService
+    private readonly IBaseRepository<Order> _ordRepository;
+    public OrderService(IBaseRepository<Order> ordRepository)
     {
-        private readonly IBaseRepository<Order> _ordRepository;
+        _ordRepository = ordRepository;
+    }
 
 
-
-        public OrderService(IBaseRepository<Order> ordRepository)
+    public async Task<IBaseResponse<Order>> Add(Order order)
+    {
+        await _ordRepository.Add(order);
+        var baseResponse = new BaseResponse<Order>
         {
-            _ordRepository = ordRepository;
-        }
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = order
+        };
+        return baseResponse;
+    }
 
 
-
-        public async Task<IBaseResponse<Order>> Add(Order ord)
+    public async Task<IBaseResponse<Order>> Delete(int id, CancellationToken token)
+    {
+        var order = await _ordRepository.GetById(id, token); 
+        await _ordRepository.Delete(order);
+        var baseResponse = new BaseResponse<Order>
         {
-            await _ordRepository.Add(ord);
-            var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = order
+        }; ;
+        return baseResponse;
+    }
+
+
+    public IBaseResponse<Order> DeleteRange(IEnumerable<Order> orders)
+    {
+        var order = new Order();
+        var baseResponse = new BaseResponse<Order>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = order
+        };
+        return baseResponse;
+    }
+
+
+    public async Task<IBaseResponse<Order>> Delete(Order order)
+    {
+        await _ordRepository.Delete(order);
+        var baseResponse = new BaseResponse<Order>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = order
+        };
+        return baseResponse;
+    }
+
+
+    public async Task<IBaseResponse<Order>> Get(int id, CancellationToken token)
+    {
+        var baseResponse = new BaseResponse<Order>();
+        var order = await _ordRepository.GetById(id, token);
+        if (order == null)
+        {
+            baseResponse.Description = "Не найдено";
+            baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
+        baseResponse.Data = order;
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
+    }
 
 
-
-        public async Task<IBaseResponse<Order>> Delete(int id)
+    public async Task<IBaseResponse<IEnumerable<Order>>> GetAll()
+    {
+        var baseResponse = new BaseResponse<IEnumerable<Order>>();
+        var orders = await _ordRepository.GetAll();
+        if (orders == null)
         {
-            Order ord = new Order() { Id = id };
-            await _ordRepository.Delete(ord);
-            var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
+            baseResponse.Description = "Найдено 0 элементов";
+            baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
+        baseResponse.Data = orders;
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
+    }
 
-        public IBaseResponse<Order> DeleteRange(IEnumerable<Order> orders)
+
+    public async Task<IBaseResponse<Order>> Update(Order order)
+    {
+        var baseResponse = new BaseResponse<Order>();
+        if (order == null)
         {
-            Order order = new Order();
-            var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, order);
-            return baseResponse;
-        }
-
-
-        public async Task<IBaseResponse<Order>> Delete(Order ord)
-        {
-            await _ordRepository.Delete(ord);
-            var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
-            return baseResponse;
-        }
-
-        public async Task<IBaseResponse<Order>> Get(int id, CancellationToken token)
-        {
-            var baseResponse = new BaseResponse<Order>();
-            var ord = await _ordRepository.GetById(id, token);
-            if (ord == null)
-            {
-                baseResponse.Description = "Не найдено";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            baseResponse.Data = ord;
+            baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
 
 
-        public async Task<IBaseResponse<IEnumerable<Order>>> GetAll()
-        {
-            var baseResponse = new BaseResponse<IEnumerable<Order>>();
-            var ord = await _ordRepository.GetAll();
-            if (ord == null)
-            {
-                baseResponse.Description = "Найдено 0 элементов";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            baseResponse.Data = ord;
-            baseResponse.StatusCode = StatusCode.OK;
-            return baseResponse;
-        }
+        await _ordRepository.Update(order);
 
-
-        public async Task<IBaseResponse<Order>> Update(Order obj)
-        {
-            var baseResponse = new BaseResponse<Order>();
-            if (obj == null)
-            {
-                baseResponse.Description = "Объект не найден";
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-
-
-            await _ordRepository.Update(obj);
-
-            baseResponse.Data = obj;
-            baseResponse.Description = "успешно";
-            baseResponse.StatusCode = StatusCode.OK;
-            return baseResponse;
-        }
+        baseResponse.Data = order;
+        baseResponse.Description = "Успешно";
+        baseResponse.StatusCode = StatusCode.OK;
+        return baseResponse;
     }
 }
 

@@ -1,12 +1,10 @@
-﻿using System;
-using PharmacyProject.Domain.Models;
+﻿using PharmacyProject.Domain.Models;
 
-namespace PharmacyProject.DAL.Interfaces
+namespace PharmacyProject.DAL.Interfaces;
+
+public interface IAvailabilityRepository : IBaseRepository<Availability>
 {
-	public interface IAvailabilityRepository : IBaseRepository<Availability>
-	{
-		Task<IEnumerable<Availability>> GetAvailabilitiesByPharmacyId(int pharmacyId);
-		Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId);
-	}
+	Task<IEnumerable<Availability>> GetAvailabilitiesByPharmacyId(int pharmacyId);
+	Task<IEnumerable<Availability>> GetAvailabilitiesByDelivery(IEnumerable<int> deliveriesId);
 }
 

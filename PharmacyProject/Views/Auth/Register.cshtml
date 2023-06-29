@@ -5,7 +5,7 @@
 
 
 <h1>Регистрация пользователя</h1>
-<form id="registerForm" method="POST" action="@Url.Action("ShowDiscounts","Home")">
+<form id="registerForm" method="POST">
     <label for="email">Электронная почта:</label>
     <input type="text" id="email" name="email" required>
 
@@ -21,16 +21,16 @@
 
     document.getElementById('registerForm').addEventListener('submit', function (event) {
         event.preventDefault();
-
         getTokenAsync();
     });
+
 
     function getTokenAsync() {
         const formData = new FormData();
         formData.append("email", document.getElementById("email").value);
         formData.append("password", document.getElementById("password").value);
 
-        fetch("https://localhost:7150/Home/GenerateToken", {
+        fetch("https://localhost:7150/Auth/GenerateToken", {
             method: "POST",
             headers: { "Accept": "application/json" },
             body: formData
@@ -38,26 +38,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.access_token) {
-                    fetch("https://localhost:7150/Home/ShowDiscounts", {
-                        method: "GET",
-                        headers: {
-                            "Accept": "application/json",
-                            "Authorization": "Bearer " + data.access_token
-                        }
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                sessionStorage.setItem(tokenKey, data.access_token);
-                                console.log(data.access_token);
-                                window.location.href = "https://localhost:7150/Home/ShowDiscounts";
-
-                            } else {
-                                throw new Error('Request failed');
-                            }
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
+                    sessionStorage.setItem(tokenKey, data.access_token);
+                    console.log(data.access_token);
+                    fetchDiscounts();
                 } else {
                     console.log("Error: ", data.errorText);
                 }
@@ -65,8 +48,29 @@
             .catch(error => {
                 console.error(error);
             });
+    }
 
-    };</script>
+    function fetchDiscounts() {
+        fetch("https://localhost:7150/Auth/ShowDiscounts", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem(tokenKey)
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "https://localhost:7150/Auth/ShowDiscounts";
+                } else {
+                    throw new Error('Request failed');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    </script>
+
 
 <style>
     /* Общие стили */
