@@ -36,10 +36,10 @@ public class UpdateErrorMiddleware
         switch (ex)
         {
             case DbUpdateException:
-                errorResponse = new ErrorResponse
+                errorResponse = new ErrorResponse()
                 {
                     StatusCode = StatusCode.Error,
-                    Message = ex.Message,
+                    Data = ex.Message,
                     Description = "Update Error"
                 };
                 break;
@@ -47,7 +47,7 @@ public class UpdateErrorMiddleware
                 errorResponse = new ErrorResponse
                 {
                     StatusCode = StatusCode.Error,
-                    Message = ex.Message,
+                    Data = ex.Message,
                     Description = "There is no such object"
                 };
                 break;
@@ -55,7 +55,7 @@ public class UpdateErrorMiddleware
                 errorResponse = new ErrorResponse
                 {
                     StatusCode = StatusCode.Error,
-                    Message = ex.Message,
+                    Data = ex.Message,
                     Description = "Invalid operation"
                 };
                 break;
@@ -63,7 +63,7 @@ public class UpdateErrorMiddleware
                 errorResponse = new ErrorResponse
                 {
                     StatusCode = StatusCode.Error,
-                    Message = ex.Message,
+                    Data = ex.Message,
                     Description = "Error"
                 };
                 break;

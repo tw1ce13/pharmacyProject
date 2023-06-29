@@ -2,11 +2,15 @@
 
 namespace PharmacyProject.Services.Response;
 
-public class ErrorResponse : BaseResponse<string>
+public class ErrorResponse : IBaseResponse
 {
-    public ErrorResponse(string description, StatusCode statusCode, string message): base(description, statusCode, message)
+    public ErrorResponse()
     {
-
     }
+
+
+    public string? Description { get; set; }
+    public StatusCode StatusCode { get; set; }
+    public string Data { get; set; }
 }
 
