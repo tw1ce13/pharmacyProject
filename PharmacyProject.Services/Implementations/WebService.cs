@@ -1,10 +1,9 @@
 ﻿using System;
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -33,7 +32,7 @@ namespace PharmacyProject.Services.Implementations
 
         public async Task<IBaseResponse<Web>> Delete(int id)
         {
-            Web web = new Web() { Id = id };
+            var web = new Web() { Id = id };
             await _webRepository.Delete(web);
             var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
 

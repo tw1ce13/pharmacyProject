@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -33,7 +31,7 @@ namespace PharmacyProject.Services.Implementations
 
         public async Task<IBaseResponse<Drug>> Delete(int id)
         {
-            Drug drug = new Drug() { Id = id };
+            var drug = new Drug() { Id = id };
             await _drugRepository.Delete(drug);
             var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
             return baseResponse;
@@ -114,7 +112,7 @@ namespace PharmacyProject.Services.Implementations
         }
 
 
-        public async Task<BaseResponse<IEnumerable<DrugResult>>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<Class> classes, IEnumerable<Delivery> deliveries)
+        public async Task<BaseResponse<IEnumerable<DrugResult>>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<DrugClass> classes, IEnumerable<Delivery> deliveries)
         {
             var baseResponse = new BaseResponse<IEnumerable<DrugResult>>();
             var list = await _drugRepository.GetDrugs(availabilities, classes, deliveries);

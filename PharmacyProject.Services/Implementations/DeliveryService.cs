@@ -1,10 +1,9 @@
 ﻿using System;
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -32,7 +31,7 @@ namespace PharmacyProject.Services.Implementations
 
         public async Task<IBaseResponse<Delivery>> Delete(int id)
         {
-            Delivery delivery = new Delivery() { Id = id };
+            var delivery = new Delivery() { Id = id };
             await _deliveryRepository.Delete(delivery);
             var baseResponse = new BaseResponse<Delivery>("Success", StatusCode.OK, delivery);
             return baseResponse;

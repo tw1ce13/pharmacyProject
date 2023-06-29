@@ -16,7 +16,7 @@ namespace PharmacyProject.DAL
         }
 
         public DbSet<Availability> Availabilities { get; set; }
-        public DbSet<Class> Classes { get; set; }
+        public DbSet<DrugClass> Classes { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Drug> Drugs { get; set; }

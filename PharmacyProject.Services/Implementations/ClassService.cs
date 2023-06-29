@@ -1,59 +1,58 @@
 ﻿using System;
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
     public class ClassService : IClassService
     {
-        private readonly IBaseRepository<Class> _classRepository;
+        private readonly IBaseRepository<DrugClass> _classRepository;
 
 
 
-        public ClassService(IBaseRepository<Class> classRepository)
+        public ClassService(IBaseRepository<DrugClass> classRepository)
         {
             _classRepository = classRepository;
         }
 
 
 
-        public async Task<IBaseResponse<Class>> Add(Class @class)
+        public async Task<IBaseResponse<DrugClass>> Add(DrugClass @class)
         {
             await _classRepository.Add(@class);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
+            var baseResponse = new BaseResponse<DrugClass>("Success", StatusCode.OK, @class);
 
             return baseResponse;
         }
 
 
 
-        public async Task<IBaseResponse<Class>> Delete(int id)
+        public async Task<IBaseResponse<DrugClass>> Delete(int id)
         {
-            Class obj = new Class()
+            var obj = new DrugClass()
             {
-                ClassId = id
+                Id = id
             };
             await _classRepository.Delete(obj);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, obj);
+            var baseResponse = new BaseResponse<DrugClass>("Success", StatusCode.OK, obj);
 
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Class>> Delete(Class @class)
+        public async Task<IBaseResponse<DrugClass>> Delete(DrugClass @class)
         {
             await _classRepository.Delete(@class);
-            var baseResponse = new BaseResponse<Class>("Success", StatusCode.OK, @class);
+            var baseResponse = new BaseResponse<DrugClass>("Success", StatusCode.OK, @class);
 
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Class>> Get(int id, CancellationToken token)
+        public async Task<IBaseResponse<DrugClass>> Get(int id, CancellationToken token)
         {
-            var baseResponse = new BaseResponse<Class>();
+            var baseResponse = new BaseResponse<DrugClass>();
             var obj = await _classRepository.GetById(id, token);
             if (obj == null)
             {
@@ -67,9 +66,9 @@ namespace PharmacyProject.Services.Implementations
         }
 
 
-        public async Task<IBaseResponse<IEnumerable<Class>>> GetAll()
+        public async Task<IBaseResponse<IEnumerable<DrugClass>>> GetAll()
         {
-            var baseResponse = new BaseResponse<IEnumerable<Class>>();
+            var baseResponse = new BaseResponse<IEnumerable<DrugClass>>();
             var obj = await _classRepository.GetAll();
             if (obj == null)
             {
@@ -82,9 +81,9 @@ namespace PharmacyProject.Services.Implementations
             return baseResponse;
         }
 
-        public async Task<IBaseResponse<Class>> Update(Class @class)
+        public async Task<IBaseResponse<DrugClass>> Update(DrugClass @class)
         {
-            var baseResponse = new BaseResponse<Class>();
+            var baseResponse = new BaseResponse<DrugClass>();
             if (@class == null)
             {
                 baseResponse.Description = "Объект не найден";

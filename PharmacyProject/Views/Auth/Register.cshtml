@@ -30,7 +30,7 @@
         formData.append("email", document.getElementById("email").value);
         formData.append("password", document.getElementById("password").value);
 
-        fetch("https://localhost:7150/Home/GenerateToken", {
+        fetch("https://localhost:7150/Auth/GenerateToken", {
             method: "POST",
             headers: { "Accept": "application/json" },
             body: formData
@@ -51,7 +51,7 @@
     }
 
     function fetchDiscounts() {
-        fetch("https://localhost:7150/Home/ShowDiscounts", {
+        fetch("https://localhost:7150/Auth/ShowDiscounts", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -60,7 +60,7 @@
         })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = "https://localhost:7150/Home/ShowDiscounts";
+                    window.location.href = "https://localhost:7150/Auth/ShowDiscounts";
                 } else {
                     throw new Error('Request failed');
                 }

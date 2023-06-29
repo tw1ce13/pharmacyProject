@@ -9,10 +9,14 @@
   <ItemGroup>
     <None Remove="Implementations\" />
     <None Remove="Interfaces\" />
+    <None Remove="Middleware\" />
+    <None Remove="Response\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementations\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Response\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PharmacyProject.Domain\PharmacyProject.Domain.csproj" />
@@ -20,5 +24,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.8" />
   </ItemGroup>
 </Project>

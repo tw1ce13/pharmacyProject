@@ -72,12 +72,12 @@ namespace PharmacyProject.DAL.Repositories
         }
 
 
-        public async Task<IEnumerable<DrugResult>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<Class> classes, IEnumerable<Delivery> deliveries)
+        public async Task<IEnumerable<DrugResult>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<DrugClass> classes, IEnumerable<Delivery> deliveries)
         {
             var drugs = await _context.Drugs.ToListAsync();
             var result = from drug in drugs
                          join availability in availabilities on drug.Id equals availability.DrugId
-                         join obj in classes on drug.ClassId equals obj.ClassId
+                         join obj in classes on drug.ClassId equals obj.Id
                          join delivery in deliveries on availability.DeliveryId equals delivery.Id
                          select new DrugResult
                          {

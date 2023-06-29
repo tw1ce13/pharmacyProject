@@ -8,7 +8,8 @@ using PharmacyProject.Services.Implementations;
 using PharmacyProject.Services.Interfaces;
 using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.DAL.Middleware;
+using PharmacyProject.Services.Middleware;
+using PharmacyProject;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,7 +79,7 @@ builder.Services.AddScoped<IWebService, WebService>();
 
 
 builder.Services.AddTransient<IAvailabilityRepository, AvailabilityRepository>();
-builder.Services.AddTransient<IBaseRepository<Class>, ClassRepository>();
+builder.Services.AddTransient<IBaseRepository<DrugClass>, DrugClassRepository>();
 builder.Services.AddTransient<IBaseRepository<Discount>, DiscountRepository>();
 builder.Services.AddTransient<IDeliveryRepository, DeliveryRepository>();
 builder.Services.AddTransient<IDrugRepository, DrugRepository>();
@@ -116,6 +117,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Main}/{action=Index}/{id?}");
 app.Run();
 

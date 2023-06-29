@@ -1,11 +1,9 @@
 ﻿using System;
 using PharmacyProject.Domain.Enum;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
-using System.Security.Cryptography;
 using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.DAL.Repositories;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -33,7 +31,7 @@ namespace PharmacyProject.Services.Implementations
 
         public async Task<IBaseResponse<Order>> Delete(int id)
         {
-            Order ord = new Order() { Id = id };
+            var ord = new Order() { Id = id };
             await _ordRepository.Delete(ord);
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, ord);
             return baseResponse;
@@ -41,7 +39,7 @@ namespace PharmacyProject.Services.Implementations
 
         public IBaseResponse<Order> DeleteRange(IEnumerable<Order> orders)
         {
-            Order order = new Order();
+            var order = new Order();
             var baseResponse = new BaseResponse<Order>("Success", StatusCode.OK, order);
             return baseResponse;
         }

@@ -1,10 +1,9 @@
 ﻿using System;
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -31,7 +30,7 @@ namespace PharmacyProject.Services.Implementations
         public async Task<IBaseResponse<Availability>> Delete(int id)
         {
 
-            Availability availability = new Availability() { Id = id };
+            var availability = new Availability() { Id = id };
             await _availabilityRepository.Delete(availability);
             var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
             return baseResponse;

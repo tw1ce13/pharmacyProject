@@ -1,17 +1,16 @@
 ﻿using System;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
+using PharmacyProject.Services.Response;
 
-namespace PharmacyProject.Services.Interfaces
+namespace PharmacyProject.Services.Interfaces;
+
+public interface IClassService
 {
-    public interface IClassService
-    {
-        Task<IBaseResponse<IEnumerable<Class>>> GetAll();
-        Task<IBaseResponse<Class>> Get(int id, CancellationToken token);
-        Task<IBaseResponse<Class>> Delete(int id);
-        Task<IBaseResponse<Class>> Delete(Class obj);
-        Task<IBaseResponse<Class>> Add(Class obj);
-        Task<IBaseResponse<Class>> Update(Class obj);
-    }
+    Task<IBaseResponse<IEnumerable<DrugClass>>> GetAll();
+    Task<IBaseResponse<DrugClass>> Get(int id, CancellationToken token);
+    Task<IBaseResponse<DrugClass>> Delete(int id);
+    Task<IBaseResponse<DrugClass>> Delete(DrugClass obj);
+    Task<IBaseResponse<DrugClass>> Add(DrugClass obj);
+    Task<IBaseResponse<DrugClass>> Update(DrugClass obj);
 }
 

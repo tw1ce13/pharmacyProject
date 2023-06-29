@@ -1,10 +1,9 @@
-﻿using System;
+﻿
 using PharmacyProject.DAL.Interfaces;
-using PharmacyProject.DAL.Repositories;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -33,7 +32,7 @@ namespace PharmacyProject.Services.Implementations
 
         public async Task<IBaseResponse<Recipe>> Delete(int id)
         {
-            Recipe recipe = new Recipe() { Id = id };
+            var recipe = new Recipe() { Id = id };
             await _recipeRepository.Delete(recipe);
             var baseResponse = new BaseResponse<Recipe>("Success", StatusCode.OK, recipe);
 

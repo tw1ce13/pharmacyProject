@@ -5,42 +5,42 @@ using PharmacyProject.Domain.Models;
 
 namespace PharmacyProject.DAL.Repositories
 {
-	public class ClassRepository : IBaseRepository<Class>
+	public class DrugClassRepository : IBaseRepository<DrugClass>
 	{
 		private readonly PharmacyContext _context;
-		public ClassRepository(PharmacyContext context)
+		public DrugClassRepository(PharmacyContext context)
 		{
 			_context = context;
 		}
 
-        public async Task Add(Class @class)
+        public async Task Add(DrugClass @class)
         {
             _context.Classes.Add(@class);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(Class @class)
+        public async Task Delete(DrugClass @class)
         {
             _context.Classes.Remove(@class);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Class>> GetAll() =>
+        public async Task<IEnumerable<DrugClass>> GetAll() =>
             await _context.Classes.ToListAsync();
 
-        public async Task<Class> GetById(int id, CancellationToken token)
+        public async Task<DrugClass> GetById(int id, CancellationToken token)
         {
-            var obj = await _context.Classes.FirstOrDefaultAsync(x => x.ClassId == id, token);
+            var obj = await _context.Classes.FirstOrDefaultAsync(x => x.Id == id, token);
             return obj!;
         }
 
-        public async Task<Class> GetbyName(string name)
+        public async Task<DrugClass> GetbyName(string name)
         {
             var obj = await _context.Classes.FindAsync(name);
             return obj!;
         }
 
-        public async Task Update(Class @class)
+        public async Task Update(DrugClass @class)
         {
             if (@class != null)
                 _context.Classes.Update(@class);

@@ -2,8 +2,8 @@
 using PharmacyProject.DAL.Interfaces;
 using PharmacyProject.Domain.Enum;
 using PharmacyProject.Domain.Models;
-using PharmacyProject.Domain.Response;
 using PharmacyProject.Services.Interfaces;
+using PharmacyProject.Services.Response;
 
 namespace PharmacyProject.Services.Implementations
 {
@@ -31,7 +31,7 @@ namespace PharmacyProject.Services.Implementations
 
         public async Task<IBaseResponse<Discount>> Delete(int id)
         {
-            Discount discount = new Discount() { Id = id };
+            var discount = new Discount() { Id = id };
             await _discountRepository.Delete(discount);
             var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
             return baseResponse;
