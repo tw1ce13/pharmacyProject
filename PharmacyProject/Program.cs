@@ -63,34 +63,7 @@ builder.Services.AddSession(options =>
 
 
 builder.Services.AddDbContext<PharmacyContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
-builder.Services.AddScoped<IClassService, ClassService>();
-builder.Services.AddScoped<IDeliveryService, DeliveryService>();
-builder.Services.AddScoped<IDiscountService, DiscountService>();
-builder.Services.AddScoped<IDrugService, DrugService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IOrdDrugService, OrdDrugService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IPatientService, PatientService>();
-builder.Services.AddScoped<IPharmacyService, PharmacyService>();
-builder.Services.AddScoped<IRecipeDrugService, RecipeDrugService>();
-builder.Services.AddScoped<IRecipeService, RecipeService>();
-builder.Services.AddScoped<IWebService, WebService>();
-
-
-builder.Services.AddTransient<IAvailabilityRepository, AvailabilityRepository>();
-builder.Services.AddTransient<IBaseRepository<DrugClass>, DrugClassRepository>();
-builder.Services.AddTransient<IBaseRepository<Discount>, DiscountRepository>();
-builder.Services.AddTransient<IDeliveryRepository, DeliveryRepository>();
-builder.Services.AddTransient<IDrugRepository, DrugRepository>();
-builder.Services.AddTransient<IBaseRepository<Employee>, EmployeeRepository>();
-builder.Services.AddTransient<IBaseRepository<OrdDrug>, OrdDrugRepository>();
-builder.Services.AddTransient<IBaseRepository<Order>, OrderRepository>();
-builder.Services.AddTransient<IBaseRepository<Patient>, PatientRepository>();
-builder.Services.AddTransient<IBaseRepository<Pharmacy>, PharmacyRepository>();
-builder.Services.AddTransient<IBaseRepository<RecipeDrug>, RecipeDrugRepository>();
-builder.Services.AddTransient<IBaseRepository<Recipe>, RecipeRepository>();
-builder.Services.AddTransient<IBaseRepository<Web>, WebRepository>();
+builder.Services.AddMyLibraryServices();
 
 
 
