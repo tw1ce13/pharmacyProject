@@ -18,16 +18,26 @@ public class DeliveryService : IDeliveryService
     public async Task<IBaseResponse<Delivery>> Add(Delivery delivery)
     {
         await _deliveryRepository.Add(delivery);
-        var baseResponse = new BaseResponse<Delivery>("Success", StatusCode.OK, delivery);
+        var baseResponse = new BaseResponse<Delivery>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = delivery
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Delivery>> Delete(int id)
+    public async Task<IBaseResponse<Delivery>> Delete(int id, CancellationToken token)
     {
-        var delivery = new Delivery() { Id = id };
+        var delivery = await _deliveryRepository.GetById(id, token);
         await _deliveryRepository.Delete(delivery);
-        var baseResponse = new BaseResponse<Delivery>("Success", StatusCode.OK, delivery);
+        var baseResponse = new BaseResponse<Delivery>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = delivery
+        };
         return baseResponse;
     }
 
@@ -35,7 +45,12 @@ public class DeliveryService : IDeliveryService
     public async Task<IBaseResponse<Delivery>> Delete(Delivery delivery)
     {
         await _deliveryRepository.Delete(delivery);
-        var baseResponse = new BaseResponse<Delivery>("Success", StatusCode.OK, delivery);
+        var baseResponse = new BaseResponse<Delivery>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = delivery
+        };
         return baseResponse;
     }
 
@@ -59,14 +74,14 @@ public class DeliveryService : IDeliveryService
     public async Task<IBaseResponse<IEnumerable<Delivery>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<Delivery>>();
-        var delivery = await _deliveryRepository.GetAll();
-        if (delivery == null)
+        var deliveries = await _deliveryRepository.GetAll();
+        if (deliveries == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.NotFound;
             return baseResponse;
         }
-        baseResponse.Data = delivery;
+        baseResponse.Data = deliveries;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
@@ -88,10 +103,10 @@ public class DeliveryService : IDeliveryService
     }
 
 
-    public async Task<IBaseResponse<Delivery>> Update(Delivery obj)
+    public async Task<IBaseResponse<Delivery>> Update(Delivery delivery)
     {
         var baseResponse = new BaseResponse<Delivery>();
-        if (obj == null)
+        if (delivery == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -99,10 +114,10 @@ public class DeliveryService : IDeliveryService
         }
 
 
-        await _deliveryRepository.Update(obj);
+        await _deliveryRepository.Update(delivery);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = delivery;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

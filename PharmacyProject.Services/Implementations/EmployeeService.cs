@@ -18,16 +18,26 @@ public class EmployeeService : IEmployeeService
     public async Task<IBaseResponse<Employee>> Add(Employee employee)
     {
         await _employeeRepository.Add(employee);
-        var baseResponse = new BaseResponse<Employee>("Success", StatusCode.OK, employee);
+        var baseResponse = new BaseResponse<Employee>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = employee
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Employee>> Delete(int id)
+    public async Task<IBaseResponse<Employee>> Delete(int id, CancellationToken token)
     {
-        var employee = new Employee() { Id = id };
+        var employee = await _employeeRepository.GetById(id, token);
         await _employeeRepository.Delete(employee);
-        var baseResponse = new BaseResponse<Employee>("Success", StatusCode.OK, employee);
+        var baseResponse = new BaseResponse<Employee>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = employee
+        };
         return baseResponse;
     }
 
@@ -35,7 +45,12 @@ public class EmployeeService : IEmployeeService
     public async Task<IBaseResponse<Employee>> Delete(Employee employee)
     {
         await _employeeRepository.Delete(employee);
-        var baseResponse = new BaseResponse<Employee>("Success", StatusCode.OK, employee);
+        var baseResponse = new BaseResponse<Employee>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = employee
+        };
         return baseResponse;
     }
 
@@ -59,23 +74,23 @@ public class EmployeeService : IEmployeeService
     public async Task<IBaseResponse<IEnumerable<Employee>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<Employee>>();
-        var employee = await _employeeRepository.GetAll();
-        if (employee == null)
+        var employees = await _employeeRepository.GetAll();
+        if (employees == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = employee;
+        baseResponse.Data = employees;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Employee>> Update(Employee obj)
+    public async Task<IBaseResponse<Employee>> Update(Employee employee)
     {
         var baseResponse = new BaseResponse<Employee>();
-        if (obj == null)
+        if (employee == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -83,10 +98,10 @@ public class EmployeeService : IEmployeeService
         }
 
 
-        await _employeeRepository.Update(obj);
+        await _employeeRepository.Update(employee);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = employee;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

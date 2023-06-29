@@ -18,16 +18,26 @@ public class DrugService : IDrugService
     public async Task<IBaseResponse<Drug>> Add(Drug drug)
     {
         await _drugRepository.Add(drug);
-        var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
+        var baseResponse = new BaseResponse<Drug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = drug
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Drug>> Delete(int id)
+    public async Task<IBaseResponse<Drug>> Delete(int id, CancellationToken token)
     {
-        var drug = new Drug() { Id = id };
+        var drug = await _drugRepository.GetById(id, token);
         await _drugRepository.Delete(drug);
-        var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
+        var baseResponse = new BaseResponse<Drug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = drug
+        };
         return baseResponse;
     }
 
@@ -35,7 +45,12 @@ public class DrugService : IDrugService
     public async Task<IBaseResponse<Drug>> Delete(Drug drug)
     {
         await _drugRepository.Delete(drug);
-        var baseResponse = new BaseResponse<Drug>("Success", StatusCode.OK, drug);
+        var baseResponse = new BaseResponse<Drug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = drug
+        };
         return baseResponse;
     }
 
@@ -68,7 +83,7 @@ public class DrugService : IDrugService
             };
         }
 
-        var drug = await _drugRepository.GetAll();
+        var drugs = await _drugRepository.GetAll();
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -79,13 +94,13 @@ public class DrugService : IDrugService
             };
         }
 
-        if (drug == null)
+        if (drugs == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = drug;
+        baseResponse.Data = drugs;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
 
@@ -95,15 +110,15 @@ public class DrugService : IDrugService
     public async Task<BaseResponse<IEnumerable<DrugInOrder>>> GetDrugInOrders(IEnumerable<Order> orders, IEnumerable<OrdDrug> ordDrugs, int userId)
     {
         var baseResponse = new BaseResponse<IEnumerable<DrugInOrder>>();
-        var list = await _drugRepository.GetDrugInOrders(orders, ordDrugs, userId);
+        var drugs = await _drugRepository.GetDrugInOrders(orders, ordDrugs, userId);
 
-        if (list == null)
+        if (drugs == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = list;
+        baseResponse.Data = drugs;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
@@ -112,24 +127,24 @@ public class DrugService : IDrugService
     public async Task<BaseResponse<IEnumerable<DrugResult>>> GetDrugs(IEnumerable<Availability> availabilities, IEnumerable<DrugClass> classes, IEnumerable<Delivery> deliveries)
     {
         var baseResponse = new BaseResponse<IEnumerable<DrugResult>>();
-        var list = await _drugRepository.GetDrugs(availabilities, classes, deliveries);
-        if (list == null)
+        var drugs = await _drugRepository.GetDrugs(availabilities, classes, deliveries);
+        if (drugs == null)
         {
             baseResponse.Description = "Не найдено объектов";
             baseResponse.StatusCode = StatusCode.ObjectNotFound;
             return baseResponse;
         }
-        baseResponse.Data = list;
+        baseResponse.Data = drugs;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
 
     }
 
 
-    public async Task<IBaseResponse<Drug>> Update(Drug obj)
+    public async Task<IBaseResponse<Drug>> Update(Drug drug)
     {
         var baseResponse = new BaseResponse<Drug>();
-        if (obj == null)
+        if (drug == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -137,10 +152,10 @@ public class DrugService : IDrugService
         }
 
 
-        await _drugRepository.Update(obj);
+        await _drugRepository.Update(drug);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = drug;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

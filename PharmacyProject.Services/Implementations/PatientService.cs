@@ -18,16 +18,26 @@ public class PatientService : IPatientService
     public async Task<IBaseResponse<Patient>> Add(Patient patient)
     {
         await _patientRepository.Add(patient);
-        var baseResponse = new BaseResponse<Patient>("Success", StatusCode.OK, patient);
+        var baseResponse = new BaseResponse<Patient>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = patient
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Patient>> Delete(int id)
+    public async Task<IBaseResponse<Patient>> Delete(int id, CancellationToken token)
     {
-        var patient = new Patient() { Id = id };
+        var patient = await _patientRepository.GetById(id, token);
         await _patientRepository.Delete(patient);
-        var baseResponse = new BaseResponse<Patient>("Success", StatusCode.OK, patient);
+        var baseResponse = new BaseResponse<Patient>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = patient
+        };
         return baseResponse;
     }
 
@@ -35,7 +45,12 @@ public class PatientService : IPatientService
     public async Task<IBaseResponse<Patient>> Delete(Patient patient)
     {
         await _patientRepository.Delete(patient);
-        var baseResponse = new BaseResponse<Patient>("Success", StatusCode.OK, patient);
+        var baseResponse = new BaseResponse<Patient>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = patient
+        };
         return baseResponse;
     }
 
@@ -59,33 +74,33 @@ public class PatientService : IPatientService
     public async Task<IBaseResponse<IEnumerable<Patient>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<Patient>>();
-        var patient = await _patientRepository.GetAll();
-        if (patient == null)
+        var patients = await _patientRepository.GetAll();
+        if (patients == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = patient;
+        baseResponse.Data = patients;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Patient>> Update(Patient obj)
+    public async Task<IBaseResponse<Patient>> Update(Patient patient)
     {
         var baseResponse = new BaseResponse<Patient>();
-        if (obj == null)
+        if (patient == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
 
-        await _patientRepository.Update(obj);
+        await _patientRepository.Update(patient);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = patient;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

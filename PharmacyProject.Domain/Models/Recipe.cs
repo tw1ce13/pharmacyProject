@@ -4,8 +4,8 @@ namespace PharmacyProject.Domain.Models;
 public class Recipe
 {
 	public int Id { get; set; }
-	public int IdPatient { get; set; }
-	[ForeignKey("IdPatient")]
+	public int PatientId { get; set; }
+	[ForeignKey("PatientId")]
 	public Patient? Patient { get; set; }
 }
 

@@ -4,8 +4,8 @@ namespace PharmacyProject.Domain.Models;
 public class Order
 {
 	public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public int PharmacyId { get; set; }
+    public DateTime Date { get; set; }
+    public int PharmacyId { get; set; }
 	[ForeignKey("PharmacyId")]
 	public Pharmacy? Pharmacy { get; set; }
 	public int EmployeeId { get; set; }

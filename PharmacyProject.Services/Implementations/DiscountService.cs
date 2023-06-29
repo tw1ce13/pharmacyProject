@@ -21,16 +21,26 @@ public class DiscountService : IDiscountService
     public async Task<IBaseResponse<Discount>> Add(Discount discount)
     {
         await _discountRepository.Add(discount);
-        var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
+        var baseResponse = new BaseResponse<Discount>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = discount
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Discount>> Delete(int id)
+    public async Task<IBaseResponse<Discount>> Delete(int id, CancellationToken token)
     {
-        var discount = new Discount() { Id = id };
+        var discount = await _discountRepository.GetById(id, token);
         await _discountRepository.Delete(discount);
-        var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
+        var baseResponse = new BaseResponse<Discount>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = discount
+        };
         return baseResponse;
     }
 
@@ -38,7 +48,12 @@ public class DiscountService : IDiscountService
     public async Task<IBaseResponse<Discount>> Delete(Discount discount)
     {
         await _discountRepository.Delete(discount);
-        var baseResponse = new BaseResponse<Discount>("Success", StatusCode.OK, discount);
+        var baseResponse = new BaseResponse<Discount>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = discount
+        };
         return baseResponse;
     }
 
@@ -63,23 +78,23 @@ public class DiscountService : IDiscountService
     public async Task<IBaseResponse<IEnumerable<Discount>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<Discount>>();
-        var discount = await _discountRepository.GetAll();
-        if (discount == null)
+        var discounts = await _discountRepository.GetAll();
+        if (discounts == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = discount;
+        baseResponse.Data = discounts;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Discount>> Update(Discount obj)
+    public async Task<IBaseResponse<Discount>> Update(Discount discount)
     {
         var baseResponse = new BaseResponse<Discount>();
-        if (obj == null)
+        if (discount == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -87,10 +102,10 @@ public class DiscountService : IDiscountService
         }
 
 
-        await _discountRepository.Update(obj);
+        await _discountRepository.Update(discount);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = discount;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
 

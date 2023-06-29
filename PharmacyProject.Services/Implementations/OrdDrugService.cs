@@ -18,16 +18,26 @@ public class OrdDrugService : IOrdDrugService
     public async Task<IBaseResponse<OrdDrug>> Add(OrdDrug ordDrug)
     {
         await _ordDrugRepository.Add(ordDrug);
-        var baseResponse = new BaseResponse<OrdDrug>("Success", StatusCode.OK, ordDrug);
+        var baseResponse = new BaseResponse<OrdDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = ordDrug
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<OrdDrug>> Delete(int id)
+    public async Task<IBaseResponse<OrdDrug>> Delete(int id, CancellationToken token)
     {
-        var ordDrug = new OrdDrug() { Id = id };
+        var ordDrug = await _ordDrugRepository.GetById(id, token);
         await _ordDrugRepository.Delete(ordDrug);
-        var baseResponse = new BaseResponse<OrdDrug>("Success", StatusCode.OK, ordDrug);
+        var baseResponse = new BaseResponse<OrdDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = ordDrug
+        };
         return baseResponse;
     }
 
@@ -35,7 +45,12 @@ public class OrdDrugService : IOrdDrugService
     public IBaseResponse<OrdDrug> DeleteRange(IEnumerable<OrdDrug> ordDrugs)
     {
         var ordDrug = new OrdDrug();
-        var baseResponse = new BaseResponse<OrdDrug>("Success", StatusCode.OK, ordDrug);
+        var baseResponse = new BaseResponse<OrdDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = ordDrug
+        };
         return baseResponse;
     }
 
@@ -43,7 +58,12 @@ public class OrdDrugService : IOrdDrugService
     public async Task<IBaseResponse<OrdDrug>> Delete(OrdDrug ordDrug)
     {
         await _ordDrugRepository.Delete(ordDrug);
-        var baseResponse = new BaseResponse<OrdDrug>("Success", StatusCode.OK, ordDrug);
+        var baseResponse = new BaseResponse<OrdDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = ordDrug
+        };
         return baseResponse;
     }
 
@@ -67,23 +87,23 @@ public class OrdDrugService : IOrdDrugService
     public async Task<IBaseResponse<IEnumerable<OrdDrug>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<OrdDrug>>();
-        var ordDrug = await _ordDrugRepository.GetAll();
-        if (ordDrug == null)
+        var ordDrugs = await _ordDrugRepository.GetAll();
+        if (ordDrugs == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = ordDrug;
+        baseResponse.Data = ordDrugs;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<OrdDrug>> Update(OrdDrug obj)
+    public async Task<IBaseResponse<OrdDrug>> Update(OrdDrug ordDrug)
     {
         var baseResponse = new BaseResponse<OrdDrug>();
-        if (obj == null)
+        if (ordDrug == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -91,10 +111,10 @@ public class OrdDrugService : IOrdDrugService
         }
 
 
-        await _ordDrugRepository.Update(obj);
+        await _ordDrugRepository.Update(ordDrug);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = ordDrug;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

@@ -33,7 +33,7 @@ public class DrugsController : Controller
         var baseResponseDrug = await _drugService.GetAll(cancellationToken);
         var baseResponseAvailability = await _availabilityService.GetAvailabilitiesByPharmacyId(pharmacyId);
         var baseResponseDelivery = await _deliveryService.GetFresh();
-        var baseResponseAvailabilityFresh = await _availabilityService.GetAvailabilityByDelivery(baseResponseDelivery.Data.Select(x => x.Id));
+        var baseResponseAvailabilityFresh = await _availabilityService.GetAvailabilitiesByDelivery(baseResponseDelivery.Data.Select(x => x.Id));
         var baseResponseClass = await _classService.GetAll();
         var availabilities = from availability in baseResponseAvailability.Data
                              join avail in baseResponseAvailabilityFresh.Data on new { availability.PharmacyId, availability.DeliveryId }

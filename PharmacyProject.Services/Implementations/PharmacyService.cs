@@ -18,16 +18,26 @@ public class PharmacyService : IPharmacyService
     public async Task<IBaseResponse<Pharmacy>> Add(Pharmacy pharmacy)
     {
         await _pharmacyRepository.Add(pharmacy);
-        var baseResponse = new BaseResponse<Pharmacy>("Success", StatusCode.OK, pharmacy);
+        var baseResponse = new BaseResponse<Pharmacy>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = pharmacy
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Pharmacy>> Delete(int id)
+    public async Task<IBaseResponse<Pharmacy>> Delete(int id, CancellationToken token)
     {
-        var pharmacy = new Pharmacy() { Id = id };
+        var pharmacy = await _pharmacyRepository.GetById(id, token);
         await _pharmacyRepository.Delete(pharmacy);
-        var baseResponse = new BaseResponse<Pharmacy>("Success", StatusCode.OK, pharmacy);
+        var baseResponse = new BaseResponse<Pharmacy>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = pharmacy
+        };
         return baseResponse;
     }
 
@@ -35,7 +45,12 @@ public class PharmacyService : IPharmacyService
     public async Task<IBaseResponse<Pharmacy>> Delete(Pharmacy pharmacy)
     {
         await _pharmacyRepository.Delete(pharmacy);
-        var baseResponse = new BaseResponse<Pharmacy>("Success", StatusCode.OK, pharmacy);
+        var baseResponse = new BaseResponse<Pharmacy>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = pharmacy
+        };
         return baseResponse;
     }
 
@@ -59,33 +74,33 @@ public class PharmacyService : IPharmacyService
     public async Task<IBaseResponse<IEnumerable<Pharmacy>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<Pharmacy>>();
-        var pharmacy = await _pharmacyRepository.GetAll();
-        if (pharmacy == null)
+        var pharmacies = await _pharmacyRepository.GetAll();
+        if (pharmacies == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = pharmacy;
+        baseResponse.Data = pharmacies;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Pharmacy>> Update(Pharmacy obj)
+    public async Task<IBaseResponse<Pharmacy>> Update(Pharmacy pharmacy)
     {
         var baseResponse = new BaseResponse<Pharmacy>();
-        if (obj == null)
+        if (pharmacy == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
 
-        await _pharmacyRepository.Update(obj);
+        await _pharmacyRepository.Update(pharmacy);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = pharmacy;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

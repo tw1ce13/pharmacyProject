@@ -27,7 +27,7 @@ public class AvailabilityRepository : IAvailabilityRepository
     }
 
 
-    public async Task<IEnumerable<Availability>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId)
+    public async Task<IEnumerable<Availability>> GetAvailabilitiesByDelivery(IEnumerable<int> deliveriesId)
     {
         var list = await _context.Availabilities.Where(x => deliveriesId.Contains(x.DeliveryId)).ToListAsync();
         return list;

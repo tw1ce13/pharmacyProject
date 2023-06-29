@@ -26,7 +26,7 @@ public class MainController : Controller
     public async Task<ActionResult> GetPharmacyAddresses(int webId)
     {
         var baseResponsePharmacy = await _pharmacyService.GetAll();
-        var pharmacies = baseResponsePharmacy.Data.Where(p => p.IdWeb == webId);
+        var pharmacies = baseResponsePharmacy.Data.Where(p => p.WebId == webId);
         return PartialView("_PharmacyAddressesPartialView", pharmacies);
     }
 

@@ -18,16 +18,26 @@ public class RecipeDrugService : IRecipeDrugService
     public async Task<IBaseResponse<RecipeDrug>> Add(RecipeDrug recipeDrug)
     {
         await _recipeDrugRepository.Add(recipeDrug);
-        var baseResponse = new BaseResponse<RecipeDrug>("Success", StatusCode.OK, recipeDrug);
+        var baseResponse = new BaseResponse<RecipeDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = recipeDrug
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<RecipeDrug>> Delete(int id)
+    public async Task<IBaseResponse<RecipeDrug>> Delete(int id, CancellationToken token)
     {
-        var recipeDrug = new RecipeDrug() { Id = id };
+        var recipeDrug = await _recipeDrugRepository.GetById(id, token);
         await _recipeDrugRepository.Delete(recipeDrug);
-        var baseResponse = new BaseResponse<RecipeDrug>("Success", StatusCode.OK, recipeDrug);
+        var baseResponse = new BaseResponse<RecipeDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = recipeDrug
+        };
 
         return baseResponse;
     }
@@ -36,7 +46,12 @@ public class RecipeDrugService : IRecipeDrugService
     public async Task<IBaseResponse<RecipeDrug>> Delete(RecipeDrug recipeDrug)
     {
         await _recipeDrugRepository.Delete(recipeDrug);
-        var baseResponse = new BaseResponse<RecipeDrug>("Success", StatusCode.OK, recipeDrug);
+        var baseResponse = new BaseResponse<RecipeDrug>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = recipeDrug
+        };
 
         return baseResponse;
     }
@@ -61,23 +76,23 @@ public class RecipeDrugService : IRecipeDrugService
     public async Task<IBaseResponse<IEnumerable<RecipeDrug>>> GetAll()
     {
         var baseResponse = new BaseResponse<IEnumerable<RecipeDrug>>();
-        var recipeDrug = await _recipeDrugRepository.GetAll();
-        if (recipeDrug == null)
+        var recipeDrugs = await _recipeDrugRepository.GetAll();
+        if (recipeDrugs == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
-        baseResponse.Data = recipeDrug;
+        baseResponse.Data = recipeDrugs;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<RecipeDrug>> Update(RecipeDrug obj)
+    public async Task<IBaseResponse<RecipeDrug>> Update(RecipeDrug recipeDrug)
     {
         var baseResponse = new BaseResponse<RecipeDrug>();
-        if (obj == null)
+        if (recipeDrug == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -85,10 +100,10 @@ public class RecipeDrugService : IRecipeDrugService
         }
 
 
-        await _recipeDrugRepository.Update(obj);
+        await _recipeDrugRepository.Update(recipeDrug);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = recipeDrug;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

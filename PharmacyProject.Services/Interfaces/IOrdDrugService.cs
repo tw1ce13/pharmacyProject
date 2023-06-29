@@ -7,7 +7,7 @@ public interface IOrdDrugService
 {
     Task<IBaseResponse<IEnumerable<OrdDrug>>> GetAll();
     Task<IBaseResponse<OrdDrug>> Get(int id, CancellationToken token);
-    Task<IBaseResponse<OrdDrug>> Delete(int id);
+    Task<IBaseResponse<OrdDrug>> Delete(int id, CancellationToken token);
     Task<IBaseResponse<OrdDrug>> Delete(OrdDrug obj);
     IBaseResponse<OrdDrug> DeleteRange(IEnumerable<OrdDrug> ordDrugs);
     Task<IBaseResponse<OrdDrug>> Add(OrdDrug obj);

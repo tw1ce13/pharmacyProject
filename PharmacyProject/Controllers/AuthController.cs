@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using PharmacyProject.Domain.Models;
 
 namespace PharmacyProject.Controllers;
 
@@ -37,7 +38,7 @@ public class AuthController : Controller
     public async Task<IActionResult> GenerateToken(string email, string password)
     {
         var identity = await AuthenticateUser(email, password);
-        if (identity == null)
+        if (identity.ClaimsIdentity == null)
             return BadRequest(new { errorText = "Invalid username or password." });
 
         var now = DateTime.UtcNow;
@@ -45,7 +46,7 @@ public class AuthController : Controller
                     issuer: AuthOptions.issure,
                     audience: AuthOptions.audience,
                     notBefore: now,
-                    claims: identity.Claims,
+                    claims: identity.ClaimsIdentity.Claims,
                     expires: DateTime.UtcNow.AddHours(1),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -59,7 +60,7 @@ public class AuthController : Controller
     }
 
 
-    private async Task<ClaimsIdentity?> AuthenticateUser(string email, string password)
+    private async Task<AuthenticationResult> AuthenticateUser(string email, string password)
     {
         var users = await _patientService.GetAll();
         var user = users.Data.FirstOrDefault(p => p.Email == email && p.Password == password);
@@ -73,9 +74,17 @@ public class AuthController : Controller
             ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
-            return claimsIdentity;
+            return new AuthenticationResult
+            {
+                Success = true,
+                ClaimsIdentity = claimsIdentity
+            };
         }
-        return null;
+        return new AuthenticationResult
+        {
+            Success = false,
+            ErrorMessage = "Invalid email or password."
+        };
     }
 }
 

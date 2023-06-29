@@ -22,17 +22,26 @@ public class AvailabilityService : IAvailabilityService
     public async Task<IBaseResponse<Availability>> Add(Availability availability)
     {
         await _availabilityRepository.Add(availability);
-        var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
+        var baseResponse = new BaseResponse<Availability>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = availability
+        };
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Availability>> Delete(int id)
+    public async Task<IBaseResponse<Availability>> Delete(int id, CancellationToken token)
     {
-
-        var availability = new Availability() { Id = id };
+        var availability = await _availabilityRepository.GetById(id, token);
         await _availabilityRepository.Delete(availability);
-        var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
+        var baseResponse = new BaseResponse<Availability>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = availability
+        };
         return baseResponse;
     }
 
@@ -40,7 +49,12 @@ public class AvailabilityService : IAvailabilityService
     public async Task<IBaseResponse<Availability>> Delete(Availability availability)
     {
         await _availabilityRepository.Delete(availability);
-        var baseResponse = new BaseResponse<Availability>("Success", StatusCode.OK, availability);
+        var baseResponse = new BaseResponse<Availability>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = availability
+        };
         return baseResponse;
     }
 
@@ -82,49 +96,49 @@ public class AvailabilityService : IAvailabilityService
     public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilitiesByPharmacyId(int pharmacyId)
     {
         var baseResponse = new BaseResponse<IEnumerable<Availability>>();
-        var list = await _availabilityRepository.GetAvailabilitiesByPharmacyId(pharmacyId);
-        if (list == null)
+        var availabilities = await _availabilityRepository.GetAvailabilitiesByPharmacyId(pharmacyId);
+        if (availabilities == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.ObjectNotFound;
             return baseResponse;
         }
-        baseResponse.Data = list;
+        baseResponse.Data = availabilities;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilityByDelivery(IEnumerable<int> deliveriesId)
+    public async Task<IBaseResponse<IEnumerable<Availability>>> GetAvailabilitiesByDelivery(IEnumerable<int> deliveriesId)
     {
         var baseResponse = new BaseResponse<IEnumerable<Availability>>();
-        var list = await _availabilityRepository.GetAvailabilityByDelivery(deliveriesId);
-        if (list == null)
+        var availabilities = await _availabilityRepository.GetAvailabilitiesByDelivery(deliveriesId);
+        if (availabilities == null)
         {
             baseResponse.Description = "Найдено 0 элементов";
             baseResponse.StatusCode = StatusCode.ObjectNotFound;
             return baseResponse;
         }
-        baseResponse.Data = list;
+        baseResponse.Data = availabilities;
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Availability>> Update(Availability obj)
+    public async Task<IBaseResponse<Availability>> Update(Availability availability)
     {
         var baseResponse = new BaseResponse<Availability>();
-        if (obj == null)
+        if (availability == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
             return baseResponse;
         }
 
-        await _availabilityRepository.Update(obj);
+        await _availabilityRepository.Update(availability);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = availability;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }

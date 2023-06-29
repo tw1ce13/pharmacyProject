@@ -18,17 +18,27 @@ public class WebService : IWebService
     public async Task<IBaseResponse<Web>> Add(Web web)
     {
         await _webRepository.Add(web);
-        var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
+        var baseResponse = new BaseResponse<Web>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = web
+        };
 
         return baseResponse;
     }
 
 
-    public async Task<IBaseResponse<Web>> Delete(int id)
+    public async Task<IBaseResponse<Web>> Delete(int id, CancellationToken token)
     {
-        var web = new Web() { Id = id };
+        var web = await _webRepository.GetById(id, token);
         await _webRepository.Delete(web);
-        var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
+        var baseResponse = new BaseResponse<Web>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = web
+        };
 
         return baseResponse;
     }
@@ -37,7 +47,12 @@ public class WebService : IWebService
     public async Task<IBaseResponse<Web>> Delete(Web web)
     {
         await _webRepository.Delete(web);
-        var baseResponse = new BaseResponse<Web>("Success", StatusCode.OK, web);
+        var baseResponse = new BaseResponse<Web>
+        {
+            Description = "Success",
+            StatusCode = StatusCode.OK,
+            Data = web
+        };
 
         return baseResponse;
     }
@@ -76,10 +91,10 @@ public class WebService : IWebService
 
     }
 
-    public async Task<IBaseResponse<Web>> Update(Web obj)
+    public async Task<IBaseResponse<Web>> Update(Web web)
     {
         var baseResponse = new BaseResponse<Web>();
-        if (obj == null)
+        if (web == null)
         {
             baseResponse.Description = "Объект не найден";
             baseResponse.StatusCode = StatusCode.OK;
@@ -87,10 +102,10 @@ public class WebService : IWebService
         }
 
 
-        await _webRepository.Update(obj);
+        await _webRepository.Update(web);
 
-        baseResponse.Data = obj;
-        baseResponse.Description = "успешно";
+        baseResponse.Data = web;
+        baseResponse.Description = "Успешно";
         baseResponse.StatusCode = StatusCode.OK;
         return baseResponse;
     }
